@@ -1,0 +1,52 @@
+#cloud-config
+groups:
+  - docker
+users:
+  - name: ubuntu
+    groups: users, admin, docker
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
+packages:
+  - fail2ban
+  - ufw
+  - git
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+  - docker.io
+  - docker-compose
+package_update: true
+package_upgrade: true
+runcmd:
+  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+  - systemctl enable fail2ban
+  - ufw allow OpenSSH
+  - ufw enable
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i -e '/^X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^#MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
+  - sed -i -e '/^#AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^#AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '/^#AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh/authorized_keys/' /etc/ssh/sshd_config
+  - sed -i '$a AllowUsers ubuntu' /etc/ssh/sshd_config
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  # - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get update -y
+  # ============
+  # Alternative option to install docker and docker compose
+  # - apt-get install -y docker-ce docker-ce-cli containerd.io
+  # - systemctl start docker
+  # - systemctl enable docker
+  # install docker-compose following the guide: https://docs.docker.com/compose/install/
+  # - sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  # - sudo chmod +x /usr/local/bin/docker-compose
+  # - sudo apt install docker-compose
+  # - reboot
+power_state:
+  mode: reboot
+  message: Restarting after installing docker & docker-compose
