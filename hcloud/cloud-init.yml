@@ -8,16 +8,8 @@ users:
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
-# --- Example5 ---
-# Defer writing the file until after the package (Nginx) is
-# installed and its user is created alongside
+# Defer writing the file
 write_files:
-  - path: /home/ubuntu/start.sh
-    content: |
-      echo start
-    owner: 'ubuntu:ubuntu'
-    permissions: '0755'
-    defer: true
   - path: /var/lib/cloud/scripts/per-boot/init.sh
     content: |
       echo init
@@ -63,19 +55,11 @@ runcmd:
   - git config --global user.email "test@example.com"
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
-  # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  # - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - apt-get update -y
-
-  # ============
-  # Alternative option to install docker and docker compose
-  # - apt-get install -y docker-ce docker-ce-cli containerd.io
-  # - systemctl start docker
-  # - systemctl enable docker
-  # install docker-compose following the guide: https://docs.docker.com/compose/install/
-  # - sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  # - sudo chmod +x /usr/local/bin/docker-compose
-  # - sudo apt install docker-compose
+  - cat <<EOF >/home/ubuntu/start.sh
+    echo "start.sh executed"
+    EOF
+  - chmod +x start.sh
   # - reboot
 power_state:
   delay: now
