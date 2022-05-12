@@ -21,6 +21,11 @@ write_files:
       fi
     owner: 'ubuntu:ubuntu'
     permissions: '0777'
+  - path: /etc/sysctl.d/60-disable-ipv6.conf
+    owner: root
+    content: |
+      net.ipv6.conf.all.disable_ipv6=1
+      net.ipv6.conf.default.disable_ipv6=1
 packages:
   - fail2ban
   - ufw
@@ -53,10 +58,12 @@ runcmd:
   - sysctl -w net.ipv6.conf.default.disable_ipv6=1
   - export HOME=/home/ubuntu
   - chown ubuntu:ubuntu /home/ubuntu
-  - git config --global user.name "mbachmann"
-  - git config --global user.email "test@example.com"
+  - git config --global user.name "ubuntu"
+  - git config --global user.email "ubuntu@example.com"
+  - git config --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
+  - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/start.sh
   - apt-get update -y
   # - reboot
