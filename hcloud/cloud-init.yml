@@ -12,6 +12,7 @@ users:
 write_files:
   - path: /var/lib/cloud/scripts/per-boot/init.sh
     content: |
+      #!/bin/sh
       echo init
       FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/start.sh
       if [ -f "$FILE" ]; then
@@ -19,7 +20,7 @@ write_files:
           $FILE
       fi
     owner: 'ubuntu:ubuntu'
-    permissions: '0755'
+    permissions: '0777'
 packages:
   - fail2ban
   - ufw
