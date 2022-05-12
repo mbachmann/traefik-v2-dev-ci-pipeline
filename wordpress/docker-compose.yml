@@ -10,7 +10,9 @@ services:
   blog:
     image: wordpress:4.9.8-apache
     environment:
-      WORDPRESS_DB_PASSWORD: dbpasswd
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
     labels:
       - traefik.http.routers.blog.rule=Host(`blog.thdi.ch`)
       - traefik.http.routers.blog.tls=true
@@ -28,7 +30,10 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: dbpasswd
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
     networks:
       - internal
     labels:
