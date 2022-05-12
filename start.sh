@@ -9,8 +9,9 @@ echo $CUR_DIR
 echo "starting containers"
 cd $CUR_DIR/traefik
 echo "*** starting traefik ***"
+./prepare.sh
 docker-compose up -d
 echo "https://monitor.thdi.ch"
-cd -
+cd $CUR_DIR
 
 
