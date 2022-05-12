@@ -1,0 +1,50 @@
+version: "3"
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+
+services:
+  blog:
+    image: wordpress:4.9.8-apache
+    environment:
+      WORDPRESS_DB_PASSWORD: dbpasswd
+    labels:
+      - traefik.http.routers.blog.rule=Host(`blog.thdi.ch`)
+      - traefik.http.routers.blog.tls=true
+      - traefik.http.routers.blog.tls.certresolver=lets-encrypt
+      - traefik.port=80
+    networks:
+      - internal
+      - proxy
+    depends_on:
+      - mysql
+    volumes:
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./data:/var/www/html # Full wordpress project  -
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: dbpasswd
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  adminer:
+    image: adminer:4.6.3-standalone
+    labels:
+      - traefik.http.routers.adminer.rule=Host(`db-admin.thdi.ch`)
+      - traefik.http.routers.adminer.tls=true
+      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    networks:
+      - internal
+      - proxy
+    depends_on:
+      - mysql

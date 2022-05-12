@@ -19,6 +19,7 @@ packages:
   - software-properties-common
   - docker.io
   - docker-compose
+  - apache2-utils
 package_update: true
 package_upgrade: true
 runcmd:
@@ -34,7 +35,7 @@ runcmd:
   - sed -i -e '/^#AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^#AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers ubuntu' /etc/ssh/sshd_config
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   # - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - apt-get update -y
   # ============

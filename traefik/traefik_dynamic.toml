@@ -1,0 +1,12 @@
+[http.middlewares.simpleAuth.basicAuth]
+  users = [
+    "admin:$apr1$KMQnKH2q$L755T7q1wTy/UOS/P.zk4/"
+  ]
+
+[http.routers.api]
+  rule = "Host(`monitor.thdi.ch`)"
+  entrypoints = ["websecure"]
+  middlewares = ["simpleAuth"]
+  service = "api@internal"
+  [http.routers.api.tls]
+    certResolver = "lets-encrypt"
