@@ -8,6 +8,25 @@ users:
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
+# --- Example5 ---
+# Defer writing the file until after the package (Nginx) is
+# installed and its user is created alongside
+write_files:
+  - path: /home/ubuntu/start.sh
+    content: |
+      echo start
+    owner: 'ubuntu:ubuntu'
+    permissions: '0755'
+    defer: true
+  - path: /var/lib/cloud/scripts/per-boot/init.sh
+    content: |
+      echo init
+      FILE=/home/ubuntu/start.sh
+      if [ -f "$FILE" ]; then
+          echo "$FILE exists."
+      fi
+    owner: 'ubuntu:ubuntu'
+    permissions: '0755'
 packages:
   - fail2ban
   - ufw
@@ -22,6 +41,7 @@ packages:
   - apache2-utils
 package_update: true
 package_upgrade: true
+timezone: Europe/Zurich
 runcmd:
   - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
   - systemctl enable fail2ban
@@ -35,9 +55,18 @@ runcmd:
   - sed -i -e '/^#AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^#AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers ubuntu' /etc/ssh/sshd_config
+  - sysctl -w net.ipv6.conf.all.disable_ipv6=1
+  - sysctl -w net.ipv6.conf.default.disable_ipv6=1
+  - export HOME=/home/ubuntu
+  - chown ubuntu:ubuntu /home/ubuntu
+  - git config --global user.name "mbachmann"
+  - git config --global user.email "test@example.com"
+  - git config --global credential.helper cache
+  - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   # - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - apt-get update -y
+
   # ============
   # Alternative option to install docker and docker compose
   # - apt-get install -y docker-ce docker-ce-cli containerd.io
@@ -49,5 +78,6 @@ runcmd:
   # - sudo apt install docker-compose
   # - reboot
 power_state:
+  delay: now
   mode: reboot
   message: Restarting after installing docker & docker-compose
