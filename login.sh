@@ -1,1 +1,4 @@
-ssh -i ~/.key/hetzner ubuntu@95.216.218.246
+
+
+source ./extract-ip.sh
+ssh -i ~/.key/hetzner ubuntu@$IPV4

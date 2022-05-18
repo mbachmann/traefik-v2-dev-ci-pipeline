@@ -4,7 +4,7 @@
   ]
 
 [http.routers.api]
-  rule = "Host(`monitor.thdi.ch`)"
+  rule = "Host(`monitor.s001.thdi.ch`)"
   entrypoints = ["websecure"]
   middlewares = ["simpleAuth"]
   service = "api@internal"
