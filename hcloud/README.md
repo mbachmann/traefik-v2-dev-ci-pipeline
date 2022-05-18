@@ -245,3 +245,34 @@ In this cas you must delete the server entry from the file ~/.ssh/known_hosts by
 ```sh
 ssh-keygen -R "xxx.xxx.xxx.xxx"
 ```
+
+## Create a volume and attach it to the server
+
+Now we create a volume, which is a similar command to the server creation.
+
+```shell
+hcloud volume create --format ext4 --server cas-oop-srv-01 --size 10 --name storage01 --automount
+```
+
+Check the disc with:
+
+```shell
+sudo fdisk -l
+```
+
+### Detach a volume
+
+You can now detach the volume from the server by calling.
+
+```shell
+hcloud volume detach cas-oop-vol-01
+```
+
+### Delete a volume
+
+You can now detach the volume from the server by calling.
+
+```shell
+hcloud volume delete cas-oop-vol-01
+```
+

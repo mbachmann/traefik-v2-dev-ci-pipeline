@@ -27,7 +27,7 @@ services:
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
       - ./data:/var/www/html # Full wordpress project  -
-
+    container_name: wordpress
   mysql:
     image: mysql:5.7
     environment:

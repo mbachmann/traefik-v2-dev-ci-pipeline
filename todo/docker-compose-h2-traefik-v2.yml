@@ -1,0 +1,24 @@
+version: '2'
+
+
+networks:
+  proxy:
+    external: true
+
+services:
+
+  todo-app-h2:
+    image: uportal/todo-app:latest
+    labels:
+      - traefik.http.routers.blog.rule=Host(`todo-h2.thdi.ch`)
+      - traefik.http.routers.blog.tls=true
+      - traefik.http.routers.blog.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    restart: always
+    networks:
+      - proxy
+    environment:
+      APP_NAME: Todo Rest with Spring Boot and H2
+      ACTIVE_PROFILES: dev,h2
+      APP_URL: https://todo-h2.thdi.ch
+    container_name: todoh2

@@ -10,11 +10,11 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
 # Defer writing the file
 write_files:
-  - path: /var/lib/cloud/scripts/per-boot/init.sh
+  - path: /var/lib/cloud/scripts/per-boot/init-container.sh
     content: |
       #!/bin/sh
       echo init
-      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/init.sh
+      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/init-container.sh
       if [ -f "$FILE" ]; then
           echo "$FILE exists."
           $FILE
@@ -64,7 +64,7 @@ runcmd:
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
-  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/init.sh
+  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/init-container.sh
   - apt-get update -y
   # - reboot
 power_state:

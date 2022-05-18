@@ -1,0 +1,37 @@
+version: "3.3"
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+
+
+services:
+
+  portainer:
+    image: portainer/portainer-ce:2.9.3
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`portainer.thdi.ch`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.services.frontend.loadbalancer.server.port=9000"
+      - "traefik.http.routers.frontend.service=frontend"
+      - "traefik.http.routers.frontend.tls.certresolver=leresolver"
+
+      # Edge
+      - "traefik.http.routers.edge.rule=Host(`edge.thdi.ch`)"
+      - "traefik.http.routers.edge.entrypoints=websecure"
+      - "traefik.http.services.edge.loadbalancer.server.port=8000"
+      - "traefik.http.routers.edge.service=edge"
+      - "traefik.http.routers.edge.tls.certresolver=leresolver"
+    container_name: portainer
+
+volumes:
+  portainer_data: ./data

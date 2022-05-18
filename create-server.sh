@@ -1,11 +1,15 @@
 #!/bin/bash
 
-export SERVER_NAME=cas-oop-srv-01
-export SERVER_TYPE=cx11
-export SERVER_IMAGE=ubuntu-20.04
-export SERVER_LOCATION=hel1
+./environment.sh
 
-# Absolute path to this script, e.g. /home/user/traefik-v2-dev-ci-pipeline/init.sh
+echo "Configured Enviroment in environment.sh"
+echo SERVER_NAME=$SERVER_NAME
+echo SERVER_TYPE=$SERVER_TYPE
+echo SERVER_IMAGE=$SERVER_IMAGE
+echo SERVER_LOCATION=$SERVER_LOCATION
+echo VOLUME_NAME=$VOLUME_NAME
+
+# Absolute path to this script, e.g. /home/user/traefik-v2-dev-ci-pipeline/init-container.sh
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline
 CUR_DIR=$(dirname "$SCRIPT")
