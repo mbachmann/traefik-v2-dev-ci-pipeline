@@ -11,5 +11,4 @@ if [ ! "$(docker ps -q -f name=traefik)" ]; then
    docker-compose up -d
 fi
 
-echo "https://monitors.s001.thdi.ch"
 echo "https://${MONITOR_URL}"

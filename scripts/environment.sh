@@ -35,10 +35,14 @@ export PORTAINER_URL="portainer.$BASE_URL"
 
 
 # ==================== DO NOT CHANGE FROM HERE =========================
-
-if ! command -v hcloud &> /dev/null
+if [ hostname == "$SERVER_NAME" ]
 then
+  echo "script is running on linux host $SERVER_NAME"
+else
+  if ! command -v hcloud &> /dev/null
+  then
     echo "<hcloud> could not be found. Please install hcloud or restart the console"
+  fi
 fi
 
 
@@ -62,7 +66,12 @@ export PRJ_ROOT_DIR="$(dirname "$CUR_SCRIPTDIR")"
 export LOCAL_DIR="$PRJ_ROOT_DIR"/local
 
 LOCAL_DIR="${PRJ_ROOT_DIR}/local"
-export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
-export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
+
+if [ ! hostname == "$SERVER_NAME" ]
+then
+  export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
+  export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
+fi
+
 
 
