@@ -7,12 +7,12 @@ networks:
 
 services:
 
-  todo-app-h2:
+  todoh2:
     image: uportal/todo-app:latest
     labels:
-      - traefik.http.routers.blog.rule=Host(`todo-h2.s001.thdi.ch`)
-      - traefik.http.routers.blog.tls=true
-      - traefik.http.routers.blog.tls.certresolver=lets-encrypt
+      - traefik.http.routers.todoh2.rule=Host(`todo-h2.s001.thdi.ch`)
+      - traefik.http.routers.todoh2.tls=true
+      - traefik.http.routers.todoh2.tls.certresolver=lets-encrypt
       - traefik.port=8080
     restart: always
     networks:
