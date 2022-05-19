@@ -1,16 +1,14 @@
 #!/bin/bash
 
-if [[  -f ./scripts/environment.sh ]]; then
-  source ./scripts/environment.sh
-else
-  source ./environment.sh
-fi
+SCRIPTDIR=$(readlink -f "$0")
+CUR_SCRIPTDIR=$(dirname "$SCRIPTDIR")
+echo "current script folder: $CUR_SCRIPTDIR"
+source "$CUR_SCRIPTDIR"/environment.sh
 
 echo "project root folder: ${PRJ_ROOT_DIR}"
 
 # make all .sh files executable
 find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
-
 
 
 echo "starting containers"

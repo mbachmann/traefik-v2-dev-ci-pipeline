@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source ./scripts/environment.sh
+source ./scripts/create-ssh-key.sh
 
 echo "Configured Enviroment in environment.sh"
 echo SERVER_NAME="${SERVER_NAME}"
@@ -10,7 +11,7 @@ echo SERVER_LOCATION="${SERVER_LOCATION}"
 echo VOLUME_NAME="${VOLUME_NAME}"
 echo BASE_URL="${BASE_URL}"
 echo PRJ_ROOT_DIR="${PRJ_ROOT_DIR}"
-echo SSH_KEY_NAME=${HCLOUD_USER_NAME}@${SERVER_NAME}
+echo SSH_KEY_NAME="${SSH_KEY_NAME}"
 
 
 cd "${PRJ_ROOT_DIR}/hcloud" || exit

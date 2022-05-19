@@ -50,7 +50,11 @@ if [[ ! "${SCRIPTDIR}" == *"traefik-v2-dev-ci-pipeline"* ]]; then
    export CUR_SCRIPTDIR=$PWD/scripts;
 else
   # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline/scripts
-  export CUR_SCRIPTDIR=$(dirname "$SCRIPTDIR")
+  CUR_SCRIPTDIR=$(dirname "$SCRIPTDIR")
+  if [[ ! "${SCRIPTDIR}" == *"scripts"* ]]; then
+    CUR_SCRIPTDIR="${CUR_SCRIPTDIR}/scripts"
+  fi
+  export CUR_SCRIPTDIR
 fi
 
 # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline
@@ -60,3 +64,5 @@ export LOCAL_DIR="$PRJ_ROOT_DIR"/local
 LOCAL_DIR="${PRJ_ROOT_DIR}/local"
 export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
 export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
+
+

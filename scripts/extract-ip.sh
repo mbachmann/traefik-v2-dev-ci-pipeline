@@ -6,5 +6,5 @@ else
   source ./environment.sh
 fi
 
-export IPV4=$(hcloud server describe "${SERVER_NAME}"| grep IP: | grep \\. |  sed  -e 's/^.*://' | sed -e 's/^[[:space:]]*//')
+export IPV4=$(hcloud server ip "${SERVER_NAME}")
 # echo "The IP is $IPV4"
