@@ -48,7 +48,7 @@ fi
 
 
 # Absolute path to this script, e.g. /home/user/traefik-v2-dev-ci-pipeline/scripts/environment.sh
-SCRIPTDIR=$(readlink -f "$0")
+SCRIPTDIR=$(readlink -f -- "$0")
 
 if [[ ! "${SCRIPTDIR}" == *"traefik-v2-dev-ci-pipeline"* ]]; then
    export CUR_SCRIPTDIR=$PWD/scripts;
