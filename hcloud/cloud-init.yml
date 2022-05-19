@@ -14,7 +14,7 @@ write_files:
     content: |
       #!/bin/sh
       echo init
-      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/init-container.sh
+      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
       if [ -f "$FILE" ]; then
           echo "$FILE exists."
           $FILE
@@ -64,7 +64,8 @@ runcmd:
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
-  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/init-container.sh
+  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
+  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh
   - apt-get update -y
   # - reboot
 power_state:

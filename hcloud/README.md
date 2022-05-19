@@ -9,7 +9,7 @@
 
 ## Prerequisits
 
-- [ssh](../sshkeypair/README.md) key pair (private and public key) ([Windows](https://www.howtogeek.com/762863/how-to-generate-ssh-keys-in-windows-10-and-windows-11/), [MacOS](https://www.digitalocean.com/community/tutorials/how-to-create-ssh-keys-with-openssh-on-macos-or-linux))
+- [ssh](../readme/sshkeypair/README.md) key pair (private and public key) ([Windows](https://www.howtogeek.com/762863/how-to-generate-ssh-keys-in-windows-10-and-windows-11/), [MacOS](https://www.digitalocean.com/community/tutorials/how-to-create-ssh-keys-with-openssh-on-macos-or-linux))
 - ssh - bash (MacOS or Windows) or [putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) (Windows)
 
 
@@ -19,17 +19,17 @@ Login to Hetzner cloud: [https://console.hetzner.cloud/projects](https://console
 
 Create a project and give a name to this project
 
-![](../images/hcloud-new-project.png)
+![](../readme/hcloud-new-project.png)
 
 ### Create a token
 
 Click on the new created project and navigate on the left toolbar to the Security tab.
 
-![](../images/hcloud-api-token.png)
+![](../readme/hcloud-api-token.png)
 
 <br/>
 
-![](../images/hcloud-api-token-public.png)
+![](../readme/hcloud-api-token-public.png)
 
 After a click on add API-TOKEN the token will be presented in a new dialog. Copy
 the token and save it.
@@ -38,7 +38,7 @@ the token and save it.
 
 Add the public key to the dialog and give the key an arbitrary name:
 
-![](../images/hcloud-add-ssh-key.png)
+![](../readme/hcloud-add-ssh-key.png)
 
 ## Install hcloud
 
