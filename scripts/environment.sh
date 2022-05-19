@@ -35,7 +35,7 @@ export PORTAINER_URL="portainer.$BASE_URL"
 
 
 # ==================== DO NOT CHANGE FROM HERE =========================
-if [ hostname == "$SERVER_NAME" ]
+if [  "$HOSTNAME" = "$SERVER_NAME" ]
 then
   echo "script is running on linux host $SERVER_NAME"
 else
@@ -67,7 +67,7 @@ export LOCAL_DIR="$PRJ_ROOT_DIR"/local
 
 LOCAL_DIR="${PRJ_ROOT_DIR}/local"
 
-if [ ! hostname == "$SERVER_NAME" ]
+if [ ! "$HOSTNAME" = "$SERVER_NAME" ]
 then
   export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
   export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
