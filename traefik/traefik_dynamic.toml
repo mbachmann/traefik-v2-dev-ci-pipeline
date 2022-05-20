@@ -4,7 +4,8 @@
   ]
 
 [http.routers.api]
-  rule = "Host(`monitor.s001.thdi.ch`)"
+
+  rule = "Host(`{{env "MONITOR_URL"}}`)"
   entrypoints = ["websecure"]
   middlewares = ["simpleAuth"]
   service = "api@internal"

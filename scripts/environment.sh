@@ -7,7 +7,7 @@ export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
-export SERVER_NAME="s001"
+export SERVER_NAME="s002"
 # Server type as in https://www.hetzner.com/cloud
 # List server types: hcloud server-type list
 export SERVER_TYPE="cx11"
@@ -29,9 +29,10 @@ export USE_HETZNER_DNS_API="true"
 export MONITOR_URL="monitor.$BASE_URL"
 export WORDPRESS_URL="blog.$BASE_URL"
 export DBADMIN_URL="db-admin.$BASE_URL"
-export TODO_URL="todo.$BASE_URL"
+export TODO_H2_URL="todo-h2.$BASE_URL"
+export TODO_MYSQL_URL="todo-mysql.$BASE_URL"
 export PORTAINER_URL="portainer.$BASE_URL"
-
+export PORTAINER_EDGE_URL="edge.$BASE_URL"
 
 
 # ==================== DO NOT CHANGE FROM HERE =========================
