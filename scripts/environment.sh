@@ -45,22 +45,7 @@ else
   fi
 fi
 
-
-
-# Absolute path to this script, e.g. /home/user/traefik-v2-dev-ci-pipeline/scripts/environment.sh
-SCRIPTDIR=$(readlink -f -- "$0")
-
-if [[ ! "${SCRIPTDIR}" == *"traefik-v2-dev-ci-pipeline"* ]]; then
-   export CUR_SCRIPTDIR=$PWD/scripts;
-else
-  # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline/scripts
-  CUR_SCRIPTDIR=$(dirname "$SCRIPTDIR")
-  if [[ ! "${SCRIPTDIR}" == *"scripts"* ]]; then
-    CUR_SCRIPTDIR="${CUR_SCRIPTDIR}/scripts"
-  fi
-  export CUR_SCRIPTDIR
-fi
-
+export CUR_SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline
 export PRJ_ROOT_DIR="$(dirname "$CUR_SCRIPTDIR")"
 export LOCAL_DIR="$PRJ_ROOT_DIR"/local

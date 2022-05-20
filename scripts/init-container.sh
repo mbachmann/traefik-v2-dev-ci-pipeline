@@ -1,7 +1,6 @@
 #!/bin/bash
 
-SCRIPTDIR=$(readlink -f "$0")
-CUR_SCRIPTDIR=$(dirname "$SCRIPTDIR")
+CUR_SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "current script folder: $CUR_SCRIPTDIR"
 source "$CUR_SCRIPTDIR"/environment.sh
 
