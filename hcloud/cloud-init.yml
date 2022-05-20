@@ -68,6 +68,9 @@ runcmd:
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh
+  - echo 'source /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh' > /home/ubuntu/.bash_profile
+  - chmod u+rwx /home/ubuntu/.bash_profile
+  - chown ubuntu:ubuntu /home/ubuntu/.bash_profile
   - apt-get update -y
   # - reboot
 power_state:
