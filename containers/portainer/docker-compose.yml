@@ -28,15 +28,14 @@ services:
       # Frontend
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.routers.frontend.rule=Host(`{{env "PORTAINER_URL"}}`)"
+      - "traefik.http.routers.frontend.rule=Host(`${PORTAINER_URL}`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.services.frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.frontend.service=frontend"
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
 
       # Edge
-      - "traefik.http.routers.edge.rule=Host(`{{env "PORTAINER_EDGE_URL"}}`)"
-      - "traefik.http.routers.edge.rule=Host(`edge.s001.thdi.ch`)"
+      - "traefik.http.routers.edge.rule=Host(`${PORTAINER_EDGE_URL}`)"
       - "traefik.http.routers.edge.entrypoints=websecure"
       - "traefik.http.services.edge.loadbalancer.server.port=8000"
       - "traefik.http.routers.edge.service=edge"

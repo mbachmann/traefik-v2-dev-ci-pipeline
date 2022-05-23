@@ -19,20 +19,35 @@ export SERVER_LOCATION="hel1"
 # List existing volumes: hcloud volume list
 export VOLUME_NAME="${SERVER_NAME}v01"
 # Arbitary ssh key name
-export SSH_KEY_NAME=${HCLOUD_USER_NAME}@${SERVER_NAME}
+export SSH_KEY_NAME="${HCLOUD_USER_NAME}"@s001
 # Server name is in the base url to allow several servers for one url and
 # lets encrypt allows only 5 registrations with same url within 7 days
-export BASE_URL="$SERVER_NAME.thdi.ch"
+export DOMAIN_URL="sintares.com"
+# recover zone id with getzones, defined in dns.sh
+export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
+
+# In this example, the server name is part of the url
+export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
 export USE_HETZNER_DNS_API="true"
 
+# Service Names
+export MONITOR_SVC="monitor"
+export BLOG_SVC="blog"
+export DBADMIN_SVC="db-admin"
+export TODO_H2_SVC="todo-h2"
+export TODO_MYSQL_SVC="todo-mysql"
+export PORTAINER_SVC="portainer"
+export PORTAINER_EDGE_SVC="edge"
+
+
 # URL's for installed applications
-export MONITOR_URL="monitor.$BASE_URL"
-export WORDPRESS_URL="blog.$BASE_URL"
-export DBADMIN_URL="db-admin.$BASE_URL"
-export TODO_H2_URL="todo-h2.$BASE_URL"
-export TODO_MYSQL_URL="todo-mysql.$BASE_URL"
-export PORTAINER_URL="portainer.$BASE_URL"
-export PORTAINER_EDGE_URL="edge.$BASE_URL"
+export MONITOR_URL="${MONITOR_SVC}.${BASE_URL}"
+export BLOG_URL="${BLOG_SVC}.${BASE_URL}"
+export DBADMIN_URL="${DBADMIN_SVC}.${BASE_URL}"
+export TODO_H2_URL="${TODO_H2_SVC}.${BASE_URL}"
+export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${BASE_URL}"
+export PORTAINER_URL="${PORTAINER_SVC}.${BASE_URL}"
+export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${BASE_URL}"
 
 
 # ==================== DO NOT CHANGE FROM HERE =========================
@@ -53,11 +68,25 @@ export LOCAL_DIR="$PRJ_ROOT_DIR"/local
 
 LOCAL_DIR="${PRJ_ROOT_DIR}/local"
 
+export LOCAL_DNS_DIR="${PRJ_ROOT_DIR}/local/dns-records"
+
 if [ ! "$HOSTNAME" = "$SERVER_NAME" ]
 then
   export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
   export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
 fi
 
+function printEnvironment() {
+  echo "Configured Enviroment in environment.sh"
+  echo SERVER_NAME="${SERVER_NAME}"
+  echo SERVER_TYPE="${SERVER_TYPE}"
+  echo SERVER_IMAGE="${SERVER_IMAGE}"
+  echo SERVER_LOCATION="${SERVER_LOCATION}"
+  echo VOLUME_NAME="${VOLUME_NAME}"
+  echo BASE_URL="${BASE_URL}"
+  echo PRJ_ROOT_DIR="${PRJ_ROOT_DIR}"
+  echo SSH_KEY_NAME="${SSH_KEY_NAME}"
+  echo LOCAL_DNS_DIR="${LOCAL_DNS_DIR}"
 
+}
 

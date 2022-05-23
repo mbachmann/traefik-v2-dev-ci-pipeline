@@ -10,10 +10,10 @@ services:
   todoh2:
     image: uportal/todo-app:latest
     labels:
-      - traefik.http.routers.todoh2.rule=Host(`todo-h2.s001.thdi.ch`)
-      - traefik.http.routers.todoh2.tls=true
-      - traefik.http.routers.todoh2.tls.certresolver=lets-encrypt
-      - traefik.port=8080
+      - "traefik.http.routers.todoh2.rule=Host(`${TODO_URL}`)"
+      - "traefik.http.routers.todoh2.tls=true"
+      - "traefik.http.routers.todoh2.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
     restart: always
     networks:
       - proxy
@@ -22,5 +22,5 @@ services:
     environment:
       APP_NAME: Todo Rest with Spring Boot and H2
       ACTIVE_PROFILES: dev,h2
-      APP_URL: https://todo-h2.s001.thdi.ch
+      APP_URL: "https://${TODO_URL}"
     container_name: todoh2
