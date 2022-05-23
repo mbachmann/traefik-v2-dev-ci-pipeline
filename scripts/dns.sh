@@ -64,7 +64,7 @@ function addDnsRecord () {
     return 1
   fi
 
-  RECORD_FILE_NAME="${LOCAL_DNS_DIR}/${CREATE_SERVICE_NAME}-${SERVER_NAME}-${DOMAIN_URL}.json"
+  RECORD_FILE_NAME="${LOCAL_DNS_DIR}/${CREATE_SERVICE_NAME}.${DOMAIN_URL}.json"
   # echo $RECORD_FILE_NAME
   if  test -f "${RECORD_FILE_NAME}" ; then
        echo "${RECORD_FILE_NAME} exists."
@@ -105,7 +105,7 @@ function deleteDnsRecord () {
   fi
 
 
-  DELETE_RECORD_FILE_NAME="${LOCAL_DNS_DIR}/${DELETE_SERVICE_NAME}-${SERVER_NAME}-${DOMAIN_URL}.json"
+  DELETE_RECORD_FILE_NAME="${LOCAL_DNS_DIR}/${DELETE_SERVICE_NAME}.${DOMAIN_URL}.json"
 
   if ! test -f "${DELETE_RECORD_FILE_NAME}" ; then
      echo "${DELETE_RECORD_FILE_NAME} does not exists, cannot delete."
