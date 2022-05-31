@@ -23,7 +23,7 @@ if [[ ! -f "${LOCAL_DIR}/id_rsa" ]]; then
 fi
 
 
-function addPublicKeyToCloudInit () {
+function addPublicKeyToCloudInit() {
 
   PUB_KEY=$(cat "${LOCAL_DIR}/id_rsa.pub")
   HCLOUD_DIR="${PRJ_ROOT_DIR}/hcloud"
@@ -36,7 +36,14 @@ function addPublicKeyToCloudInit () {
       echo "adding public key to ${HCLOUD_DIR}/cloud-init.yml"
 #      sed -i '' '/ssh_authorized_keys:$/ a \
 #              \      - $PUB_KEY' "${HCLOUD_DIR}"/cloud-init.yml
-      sed -i '' -e '/ssh_authorized_keys:/p; s/ssh_authorized_keys:/  - '"${PUB_KEY}"'/' "${HCLOUD_DIR}"/cloud-init.yml
-  fi
+      # sed -i '' -e '/ssh_authorized_keys:/p; s/ssh_authorized_keys:/  - '"${PUB_KEY}"'/' "${HCLOUD_DIR}"/cloud-init.yml
 
+      # addLineInFileOnString "${HCLOUD_DIR}"/cloud-init.yml ssh_authorized_keys: "${PUB_KEY}" a
+      pattern='ssh_authorized_keys:'
+      line="      - ${PUB_KEY}"
+      file="${HCLOUD_DIR}"/cloud-init.yml
+      tempfile="${HCLOUD_DIR}"/cloud-init.yml.tmp
+      awk -vpattern="${pattern}" -vline="${line}" '$0 ~ pattern {print; print line; next} 1' "${file}" > "${tempfile}" && mv -f "${tempfile}" "${file}"
+      unset line pattern file tempfile
+  fi
 }
