@@ -8,7 +8,7 @@ export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
-export SERVER_NAME="s002"
+export SERVER_NAME="s004"
 # Server type as in https://www.hetzner.com/cloud
 # List server types: hcloud server-type list
 export SERVER_TYPE="cx11"

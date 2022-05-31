@@ -12,7 +12,7 @@ else
   export CONTAINER_PERSISTENT_VOLUME="${CONTAINER_USER_DATA_FOLDER}"
 fi
 
-echo "persisent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
+echo "persistent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
 
 # make all .sh files executable
 find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
