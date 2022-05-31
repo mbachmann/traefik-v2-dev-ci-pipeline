@@ -1,8 +1,11 @@
 
-if [[  -f ./scripts/environment.sh ]]; then
-  source ./scripts/environment.sh
-else
-  source ./environment.sh
+
+if [[  -z "${HCLOUD_TOKEN}" ]]; then
+  if [[  -f ./scripts/environment.sh ]]; then
+    source ./scripts/environment.sh
+  else
+    source ./environment.sh
+  fi
 fi
 
 function getZones () {
@@ -88,7 +91,7 @@ function addDnsRecord () {
   # echo ${CREATE_RESPONSE} | json_pretty
 
   CREATE_RECORD_ID=$(extractJsonValue "${CREATE_RESPONSE}"  "${CREATE_SERVICE_NAME}")
-  echo "The record id for https://${CREATE_SERVICE_NAME}.${SERVER_NAME}.${DOMAIN_URL} is ${CREATE_RECORD_ID} "
+  echo "The record id for https://${CREATE_SERVICE_NAME}.${DOMAIN_URL} is ${CREATE_RECORD_ID} "
   echo "The record is written to file ${RECORD_FILE_NAME}"
   touch "${RECORD_FILE_NAME}"
   echo "${CREATE_RECORD_ID}" > "${RECORD_FILE_NAME}"

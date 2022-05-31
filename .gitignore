@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 *.local
 **/id_rsa*
+local/dns-records
 
 ### STS ###
 .apt_generated

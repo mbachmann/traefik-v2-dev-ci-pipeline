@@ -7,8 +7,8 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrscyixoq3xozuTYn0G3GNADNLnSaOAmkzC2ltiEvB6SNDGpTrYi/BstnexmfIqYwwaOMIgivhebYGgHlyTxn9WFS2060om7jsz8DnZKMpWLTLHQ4gC0IjnUJCb53NUCmo5/2KupM8bSWrZgupN65nvjr8LkYC5tZBqWKDuNo4YcSpfQwK0GGpVIW7rRV6zbl6EDIxGJbaWpDlY9Zy8hgVoBlfROJfHNCP7DMEosVsWC5RTLV+GfeboDS++JLjP6BEeDmk1FCLcZzybjQ4On80fzy2Vn1DQPpWIde5c1tgzGzDOD2NoluTmexkqBt24QmXL2W9406+QaNHcT0+Yb2Kleu2MSpp+NfIN0DPwbItNg9uk0p1TzWRDV2QTyxV4lMN9VeNOjN48YOi1K4/wX8u/0IikolqdMhmYC7JLst+Bxrp2VriZY2v5TV/3iEdtpn1DKWdvwHzfwpPEmzv0OWLSNBURa7EZtU3Hzu5u/veR0MTJzfGR3wOqEhvxcJlAb8= mbach@s001
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBv0l4kD0nT1At+90mbv7Q8v/Z73swmHCyuKoafBJ/BNNoWXxPcQpI5C7/YPFDvIoXEUJQFRnvFSXiLKwjiAeWzlddWIprWq77PmybqmWC99uIToXrJ+5o4fteWi7cy6rhN1gfROgP6hSX3pwj59sF1LzomHHIQd1+vU3+xEwNVstGZnOOSr5sKUCvGhvHbyPMgpOaUOqjTaDoJz29wXI62NKgz0D2f2uMSsIwU6npXxQMSZMohGOjvFmaTNQx0b+NVzNxnB3DvIH1Rb/+0W1OxcWq0OkBU8mq4TslMPmaF0Y3AcSlhVm4zU6T/UdzSVfOsN4yEu+i+D02AuBhs4Ks8aOPlut7WTn5kCF82JOsJe6jsuZP7iaGagRhaar3+KilTkVfr1GgaMpnEXAX+kXiOUsTRqaiDRausUjq4sQPd7lvr0WtjcYxZF1yV0sohCTt9crL2lTmmF9Q3yEw6mT9ok7EJn3wRaSpnE904NwIbR1ffrRWIojVm6blSBoEfEM= mbach@itbmba14
 
 # Defer writing the file
 write_files:
@@ -40,6 +40,7 @@ packages:
   - docker.io
   - docker-compose
   - apache2-utils
+  - hcloud-cli
 package_update: true
 package_upgrade: true
 timezone: Europe/Zurich
@@ -48,7 +49,8 @@ runcmd:
   - systemctl enable fail2ban
   - ufw allow OpenSSH
   - ufw enable
-  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  # Login from Hetzner hcloud default user is root PermitRootLogin yes or no
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin yes/' /etc/ssh/sshd_config
   - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^#MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
@@ -60,17 +62,24 @@ runcmd:
   - sysctl -w net.ipv6.conf.default.disable_ipv6=1
   - export HOME=/home/ubuntu
   - chown ubuntu:ubuntu /home/ubuntu
+    # clone git repo https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
   - git config --global user.name "ubuntu"
   - git config --global user.email "ubuntu@example.com"
   - git config --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
+  # Prepare script init-container.sh and environment.sh
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh
   - echo 'source /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh' > /home/ubuntu/.bash_profile
   - chmod u+rwx /home/ubuntu/.bash_profile
   - chown ubuntu:ubuntu /home/ubuntu/.bash_profile
+  # inhibits login messages
+  - touch /home/ubuntu/.hushlogin
+  - mkdir /home/ubuntu/data
+  # creates a data folder
+  - chmod u+rwx /home/ubuntu/data
   - apt-get update -y
   # - reboot
 power_state:
