@@ -99,6 +99,13 @@ then
   export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
 fi
 
+if [ "${USE_VOLUME}" == "true" ]; then
+  export CONTAINER_PERSISTENT_VOLUME="${CONTAINER_VOLUME_DATA_FOLDER}"
+else
+  export CONTAINER_PERSISTENT_VOLUME="${CONTAINER_USER_DATA_FOLDER}"
+fi
+
+
 function printEnvironment() {
   echo "Configured Enviroment in environment.sh"
   echo SERVER_NAME="${SERVER_NAME}"

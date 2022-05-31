@@ -3,6 +3,12 @@
 # add scripts
 source cli
 
+if [[ `git status --porcelain` ]]; then
+  echo "Warning: uncommitted git changes!!"
+else
+  # No changes
+fi
+
 echo "Configuration in environment.sh"
 printEnvironment
 
