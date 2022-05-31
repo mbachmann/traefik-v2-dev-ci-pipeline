@@ -9,11 +9,14 @@ if [[ -z "${SERVER_NAME}" ]]; then
   fi
 fi
 
-function createAndAttachVolume () {
+function createAndAttachVolume() {
 
   if [ "${USE_VOLUME}" == "true" ]; then
     if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
       if [ ! "$(hcloud volume list | grep ${VOLUME_NAME})" ]; then
+        if [[ -z "${IPV4}" ]]; then
+          export IPV4=$(hcloud server ip "${SERVER_NAME}")
+        fi
         echo "Creating and attaching volume name ${VOLUME_NAME} to server ${SERVER_NAME}..."
         hcloud volume create --format ext4 --server $SERVER_NAME --size 10 --name ${VOLUME_NAME} --automount
         if [ "$(hcloud volume list | grep ${VOLUME_NAME})" ]; then

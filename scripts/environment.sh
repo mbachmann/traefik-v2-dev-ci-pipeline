@@ -67,7 +67,7 @@ export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
 # ==================== DO NOT CHANGE FROM HERE =========================
 if [  "$HOSTNAME" = "$SERVER_NAME" ]
 then
-  echo "script is running on linux host $SERVER_NAME"
+  echo "environment.sh is running on linux host $SERVER_NAME"
 else
   if ! command -v hcloud &> /dev/null
   then
