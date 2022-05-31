@@ -55,14 +55,17 @@ export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 # In this example, the server name is part of the url
 export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
 
+export SUB_DOMAIN=".${SERVER_NAME}"
+# export SUB_DOMAIN=""
+
 # Service Names
-export MONITOR_SVC="monitor.${SERVER_NAME}"
-export BLOG_SVC="blog.${SERVER_NAME}"
-export DBADMIN_SVC="db-admin.${SERVER_NAME}"
-export TODO_H2_SVC="todo-h2.${SERVER_NAME}"
-export TODO_MYSQL_SVC="todo-mysql.${SERVER_NAME}"
-export PORTAINER_SVC="portainer.${SERVER_NAME}"
-export PORTAINER_EDGE_SVC="edge.${SERVER_NAME}"
+export MONITOR_SVC="monitor${SUB_DOMAIN}"
+export BLOG_SVC="blog${SUB_DOMAIN}"
+export DBADMIN_SVC="db-admin${SUB_DOMAIN}"
+export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
+export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
+export PORTAINER_SVC="portainer${SUB_DOMAIN}"
+export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
 
 
 # URL's for installed applications
