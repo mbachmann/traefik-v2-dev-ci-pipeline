@@ -8,7 +8,7 @@ export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
-export SERVER_NAME="s003"
+export SERVER_NAME="s002"
 # Server type as in https://www.hetzner.com/cloud
 # List server types: hcloud server-type list
 export SERVER_TYPE="cx11"
@@ -17,19 +17,25 @@ export SERVER_TYPE="cx11"
 export SERVER_IMAGE="ubuntu-20.04"
 # List locations: hcloud location list
 export SERVER_LOCATION="hel1"
-# List existing volumes: hcloud volume list
+# Ubuntu user and home directory
+export UBUNTU_USER=ubuntu
+export UBUNTU_HOME="/home/${UBUNTU_USER}"
+
+# During server setup, this repo is cloned -> change it to your repo
+export GIT_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
+
+# USE_VOLUME true will create and attach a seperate volume to the server
+# The container persitent storage is on the server disc or on the attachted volume
 export USE_VOLUME="true"
 # The name of the additional volume in Hetzner hcloud portal https://www.hetzner.com/cloud
+# List existing volumes: hcloud volume list
 export VOLUME_NAME="${SERVER_NAME}v01"
-# The mounted volume in the server: /mnt/storage1
-# If no volume is used, the volume name can be a "."
-# - ".": the persisent data is relative in the container volume
-# - ".": /home/ubuntu
 export VOLUME_MOUNT_NAME="storage1"
-# export VOLUME_MOUNT_NAME="."
+export CONTAINER_VOLUME_DATA_FOLDER="/mnt/${VOLUME_MOUNT_NAME}"
+export CONTAINER_USER_DATA_FOLDER="${UBUNTU_HOME}/data/"
+
 # The minimum volume size is 10 GBytes
 export VOLUME_SIZE="10"
-
 
 # Arbitary ssh key name
 export SSH_KEY_NAME="${HCLOUD_USER_NAME}"@s001

@@ -25,8 +25,8 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
-      - ./data:/var/www/html # Full wordpress project  -
+      - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/config/php.conf.ini":/usr/local/etc/php/conf.d/conf.ini
+      - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data":/var/www/html # Full wordpress project  -
     container_name: wordpress
   mysql:
     image: mysql:5.7
@@ -40,12 +40,12 @@ services:
     labels:
       - traefik.enable=false
     volumes:
-      - ./mysql:/var/lib/mysql
+      - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/mysql":/var/lib/mysql
 
   adminer:
     image: adminer:4.6.3-standalone
     labels:
-      - "traefik.http.routers.adminer.rule=Host(`${DBADMIN_URL}`)
+      - "traefik.http.routers.adminer.rule=Host(`${DBADMIN_URL}`)"
       - "traefik.http.routers.adminer.tls=true"
       - "traefik.http.routers.adminer.tls.certresolver=lets-encrypt"
       - "traefik.port=8080"
