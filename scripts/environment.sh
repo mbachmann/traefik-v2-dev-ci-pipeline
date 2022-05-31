@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # All details in https://developers.hetzner.com/cloud/
 
@@ -7,7 +8,7 @@ export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
-export SERVER_NAME="s002"
+export SERVER_NAME="s003"
 # Server type as in https://www.hetzner.com/cloud
 # List server types: hcloud server-type list
 export SERVER_TYPE="cx11"
@@ -77,9 +78,7 @@ fi
 export CUR_SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Absolute path this script is in, thus /home/user/traefik-v2-dev-ci-pipeline
 export PRJ_ROOT_DIR="$(dirname "$CUR_SCRIPTDIR")"
-export LOCAL_DIR="$PRJ_ROOT_DIR"/local
-
-LOCAL_DIR="${PRJ_ROOT_DIR}/local"
+export LOCAL_DIR="$PRJ_ROOT_DIR/local"
 
 export LOCAL_DNS_DIR="${PRJ_ROOT_DIR}/local/dns-records"
 

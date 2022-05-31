@@ -9,6 +9,8 @@ if [[  -z "${SERVER_NAME}" ]]; then
   fi
 fi
 
-export IPV4=$(hcloud server ip "${SERVER_NAME}")
+if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
+   export IPV4=$(hcloud server ip "${SERVER_NAME}")
+fi
 # echo "The IP is $IPV4"
 

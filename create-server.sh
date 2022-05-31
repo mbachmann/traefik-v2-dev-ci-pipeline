@@ -8,6 +8,11 @@ printEnvironment
 
 addPublicKeyToCloudInit
 
+if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
+  echo "The Server ${SERVER_NAME} already exists!"
+  return 1
+fi
+
 cd "${PRJ_ROOT_DIR}/hcloud" || exit
 hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
 

@@ -34,8 +34,9 @@ function addPublicKeyToCloudInit () {
   else
       echo "public key not found in ${HCLOUD_DIR}/cloud-init.yml"
       echo "adding public key to ${HCLOUD_DIR}/cloud-init.yml"
-      sed -i "/ssh_authorized_keys:$/a\
-              \      - $PUB_KEY" "${HCLOUD_DIR}"/cloud-init.yml
+#      sed -i '' '/ssh_authorized_keys:$/ a \
+#              \      - $PUB_KEY' "${HCLOUD_DIR}"/cloud-init.yml
+      sed -i '' -e '/ssh_authorized_keys:/p; s/ssh_authorized_keys:/  - '"${PUB_KEY}"'/' "${HCLOUD_DIR}"/cloud-init.yml
   fi
 
 }

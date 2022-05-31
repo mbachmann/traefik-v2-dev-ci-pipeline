@@ -1,3 +1,4 @@
 #!/bin/bash
 
 source ./scripts/hcloud.sh
+printEnvironment

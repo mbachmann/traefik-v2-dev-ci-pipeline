@@ -9,7 +9,7 @@ if [[ -z "${SERVER_NAME}" ]]; then
   fi
 fi
 
-function createAndAttachVolume() {
+function createAndAttachVolume () {
 
   if [ "${USE_VOLUME}" == "true" ]; then
     if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
@@ -19,11 +19,11 @@ function createAndAttachVolume() {
         if [ "$(hcloud volume list | grep ${VOLUME_NAME})" ]; then
           export LINUXVOL=$(hcloud volume describe ${VOLUME_NAME} | grep Linux | sed -e 's/^.*://' | sed -e 's/^[[:space:]]*//')
           echo "mount volume in server /mnt/${VOLUME_MOUNT_NAME} to ${LINUXVOL}, update /etc/fstab"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./local/id_rsa ubuntu@"$IPV4" "sudo mkdir /mnt/${VOLUME_MOUNT_NAME}"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./local/id_rsa ubuntu@"$IPV4" "sudo mount -o discard,defaults ${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME}"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./local/id_rsa ubuntu@"$IPV4" "echo '${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME} ext4 discard,nofail,defaults 0 0' | sudo tee -a /etc/fstab"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./local/id_rsa ubuntu@"$IPV4" "sudo chown -R ubuntu:ubuntu /mnt/${VOLUME_MOUNT_NAME}"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./local/id_rsa ubuntu@"$IPV4" "sudo chmod -R g+rwx /mnt/${VOLUME_MOUNT_NAME}"
+          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo mkdir /mnt/${VOLUME_MOUNT_NAME}"
+          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo mount -o discard,defaults ${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME}"
+          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "echo '${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME} ext4 discard,nofail,defaults 0 0' | sudo tee -a /etc/fstab"
+          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chown -R ubuntu:ubuntu /mnt/${VOLUME_MOUNT_NAME}"
+          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod -R g+rwx /mnt/${VOLUME_MOUNT_NAME}"
         fi
       else
         hcloud volume attach ${VOLUME_NAME} --server $SERVER_NAME --automount

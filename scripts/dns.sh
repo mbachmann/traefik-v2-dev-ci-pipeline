@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 if [[  -z "${HCLOUD_TOKEN}" ]]; then
   if [[  -f ./scripts/environment.sh ]]; then
