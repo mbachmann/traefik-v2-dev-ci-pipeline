@@ -24,6 +24,7 @@ export UBUNTU_HOME="/home/${UBUNTU_USER}"
 # During server setup, this repo is cloned -> change it to your repo
 export GIT_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 
+# ================================ VOLUMES ========================================
 # USE_VOLUME true will create and attach a seperate volume to the server
 # The container persitent storage is on the server disc or on the attachted volume
 export USE_VOLUME="true"
@@ -39,16 +40,20 @@ export VOLUME_SIZE="10"
 
 # Arbitary ssh key name
 export SSH_KEY_NAME="${HCLOUD_USER_NAME}"@s001
-# Server name is in the base url to allow several servers for one url and
+
+# ===================================== DNS =========================================
 # lets encrypt allows only 5 registrations with same url within 7 days
+# If the DNS is managed by Hetzner you can use the automatic DNS reccord adding https://dns.hetzner.com/
+export USE_HETZNER_DNS_API="true"
 export DOMAIN_URL="sintares.com"
 # recover zone id with getzones, defined in dns.sh
 export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 
+# ===================================== URL's =========================================
+
+# Server name is in the base url to allow several servers for one url and
 # In this example, the server name is part of the url
 export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
-# If the DNS is managed by Hetzner you can use the automatic DNS reccord adding https://dns.hetzner.com/
-export USE_HETZNER_DNS_API="true"
 
 # Service Names
 export MONITOR_SVC="monitor.${SERVER_NAME}"
@@ -70,7 +75,7 @@ export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
 export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
 
 
-# ==================== DO NOT CHANGE FROM HERE =========================
+# ==================================== DO NOT CHANGE FROM HERE =========================
 if [  "$HOSTNAME" = "$SERVER_NAME" ]
 then
   echo "environment.sh is running on linux host $SERVER_NAME"
