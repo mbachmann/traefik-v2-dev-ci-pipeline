@@ -11,6 +11,7 @@ echo "persistent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
 # make all .sh files executable
 find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
 
+# ============ REVERSE PROXY =================
 echo "starting containers"
 cd "${PRJ_ROOT_DIR}/traefik" || exit
 ./start-traefik.sh

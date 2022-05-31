@@ -33,7 +33,7 @@ export USE_VOLUME="true"
 export VOLUME_NAME="${SERVER_NAME}v01"
 export VOLUME_MOUNT_NAME="storage1"
 export CONTAINER_VOLUME_DATA_FOLDER="/mnt/${VOLUME_MOUNT_NAME}"
-export CONTAINER_USER_DATA_FOLDER="${UBUNTU_HOME}/data/"
+export CONTAINER_USER_DATA_FOLDER="${UBUNTU_HOME}/data"
 
 # The minimum volume size is 10 GBytes
 export VOLUME_SIZE="10"
