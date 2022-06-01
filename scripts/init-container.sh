@@ -17,7 +17,7 @@ cd "${PRJ_ROOT_DIR}/traefik" || exit
 ./start-traefik.sh
 
 # ============ PORTAINER  =================
-cd "${PRJ_ROOT_DIR}/portainer" || exit
+cd "${PRJ_ROOT_DIR}/containers/portainer" || exit
 ./start-portainer.sh
 
 # ============ WORD PRESS  =================

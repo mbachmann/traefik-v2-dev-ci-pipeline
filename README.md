@@ -288,6 +288,8 @@ is automatically rebooting. The login to the server is terminted. You need to lo
 ```shell
 docker ps -a
 docker logs traefik
+sudo cat /var/log/syslog | grep portainer
+cat /var/log/cloud-init.log | grep init-container
 ```
 
 Open the browser an enter: 
