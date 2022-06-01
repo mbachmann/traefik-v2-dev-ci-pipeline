@@ -28,7 +28,7 @@ The setup of the server is done by using the hetzner hcloud-cli and cloud-init.
 - bash console (windows cmd-line or PowerShell is not working). On Windows install [git bash](https://git-scm.com/downloads).
 - hcloud-cli from Hetzner [hcloud](hcloud/README.md).
 - An created project at the [Hetzner Cloud](https://console.hetzner.cloud/projects).
-- A _HCloud token_ from the Hetzner Cloud [hcloud](hcloud/README.md).
+- A _HCloud token_ from the Hetzner Cloud [Hetzner Cloud](https://console.hetzner.cloud/projects).
 - A _DNS token_ to automatically synchronize DNS records with the [Hetzner DNS Api](https://dns.hetzner.com/).
 - A **fork** of this repository.
 **Go to GitHub and create a fork**. Any change of this repository requires a _commit and push_ before creating a server. This
