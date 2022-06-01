@@ -26,6 +26,7 @@ function createServer() {
      addDnsRecord "${PORTAINER_EDGE_SVC}"
      addDnsRecord "${BLOG_SVC}"
      addDnsRecord "${DBADMIN_SVC}"
+     addDnsRecord "${DB_PHP_MYADMIN_SVC}"
      addDnsRecord "${TODO_H2_SVC}"
      addDnsRecord "${TODO_MYSQL_SVC}"
   fi
@@ -71,6 +72,7 @@ function deleteServer() {
      deleteDnsRecord "${PORTAINER_EDGE_SVC}"
      deleteDnsRecord "${BLOG_SVC}"
      deleteDnsRecord "${DBADMIN_SVC}"
+     deleteDnsRecord "${DB_PHP_MYADMIN_SVC}"
      deleteDnsRecord "${TODO_H2_SVC}"
      deleteDnsRecord "${TODO_MYSQL_SVC}"
   fi

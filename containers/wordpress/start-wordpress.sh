@@ -15,3 +15,4 @@ echo "https://${BLOG_URL}"
 
 echo "https://${DBADMIN_URL}"
 
+echo "https://${DB_PHP_MYADMIN_URL}"

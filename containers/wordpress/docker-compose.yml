@@ -29,7 +29,6 @@ services:
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data:/var/www/html" # Full wordpress project  -
     container_name: wordpress
     secrets:
-      - db_root_password
       - db_password
   mysql:
     image: mysql:5.7
@@ -48,6 +47,23 @@ services:
       - db_root_password
       - db_password
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    labels:
+      - "traefik.http.routers.adminer.rule=Host(`${DB_PHP_MYADMIN_URL}`)"
+      - "traefik.http.routers.adminer.tls=true"
+      - "traefik.http.routers.adminer.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: /run/secrets/db_root_password
+    expose:
+      - 80
+    secrets:
+      - db_root_password
+
   adminer:
     image: adminer:4.6.3-standalone
     labels:
@@ -60,6 +76,8 @@ services:
       - proxy
     depends_on:
       - mysql
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
 
 secrets:
   db_password:
