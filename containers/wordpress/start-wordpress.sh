@@ -2,7 +2,7 @@ echo "*** starting wordpress ***"
 
 if [ -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
   mkdir "${CONTAINER_PERSISTENT_VOLUME}/secrets"
-  echo "Creating secrects in ${CONTAINER_PERSISTENT_VOLUME}/secrets"
+  echo "Creating secrets in ${CONTAINER_PERSISTENT_VOLUME}/secrets"
 fi
 
 if [[ ! -f "${CONTAINER_PERSISTENT_VOLUME}/secrets/db_password.txt" ]] ; then
