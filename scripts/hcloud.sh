@@ -36,5 +36,11 @@ else
   source ./volume.sh
 fi
 
+if [[  -f ./scripts/commands.sh ]]; then
+  source ./scripts/commands.sh
+else
+  source ./commands.sh
+fi
+
 
 
