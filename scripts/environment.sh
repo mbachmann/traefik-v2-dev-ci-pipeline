@@ -54,10 +54,9 @@ export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 # Server name is in the base url to allow several servers for one url and
 # In this example, the server name is part of the url
 export SUB_DOMAIN=".${SERVER_NAME}"
-export BASE_URL="${SUB_DOMAIN}.${DOMAIN_URL}"
-
-
 # export SUB_DOMAIN=""
+export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
+
 
 # Service Names
 export MONITOR_SVC="monitor${SUB_DOMAIN}"

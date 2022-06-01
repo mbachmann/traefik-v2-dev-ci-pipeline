@@ -11,11 +11,24 @@ echo "persistent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
 # make all .sh files executable
 find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
 
-# ============ REVERSE PROXY =================
 echo "starting containers"
+# ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit
 ./start-traefik.sh
+
+# ============ PORTAINER  =================
+cd "${PRJ_ROOT_DIR}/portainer" || exit
+./start-portainer.sh
+
+# ============ WORD PRESS  =================
+cd "${PRJ_ROOT_DIR}/containers/wordpress" || exit
+./start-wordpress.sh
+
+# ========== SPRING BOOT TODOS  =================
+cd "${PRJ_ROOT_DIR}/containers/todo" || exit
+./start-todo-h2.sh
+
+
+
 cd "${PRJ_ROOT_DIR}" || exit
-
-
 
