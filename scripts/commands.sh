@@ -21,14 +21,7 @@ function createServer() {
   hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
 
   if [ "${USE_HETZNER_DNS_API}" == "true" ] ; then
-     addDnsRecord "${MONITOR_SVC}"
-     addDnsRecord "${PORTAINER_SVC}"
-     addDnsRecord "${PORTAINER_EDGE_SVC}"
-     addDnsRecord "${BLOG_SVC}"
-     addDnsRecord "${DBADMIN_SVC}"
-     addDnsRecord "${DB_PHP_MYADMIN_SVC}"
-     addDnsRecord "${TODO_H2_SVC}"
-     addDnsRecord "${TODO_MYSQL_SVC}"
+    createAllDNSRecords
   fi
 
   if [ "${USE_VOLUME}" == "true" ]; then
@@ -67,14 +60,7 @@ function deleteServer() {
   # ssh-keygen -R "$IPV4"
 
   if [ "${USE_HETZNER_DNS_API}" == "true" ] ; then
-     deleteDnsRecord "${MONITOR_SVC}"
-     deleteDnsRecord "${PORTAINER_SVC}"
-     deleteDnsRecord "${PORTAINER_EDGE_SVC}"
-     deleteDnsRecord "${BLOG_SVC}"
-     deleteDnsRecord "${DBADMIN_SVC}"
-     deleteDnsRecord "${DB_PHP_MYADMIN_SVC}"
-     deleteDnsRecord "${TODO_H2_SVC}"
-     deleteDnsRecord "${TODO_MYSQL_SVC}"
+     deleteAllDNSRecords
   fi
 
 
