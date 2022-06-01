@@ -20,6 +20,8 @@ function createServer() {
   cd "${PRJ_ROOT_DIR}/hcloud" || exit
   hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
 
+  cd "${PRJ_ROOT_DIR}"
+
   if [ "${USE_HETZNER_DNS_API}" == "true" ] ; then
     createAllDNSRecords
   fi
@@ -27,6 +29,8 @@ function createServer() {
   if [ "${USE_VOLUME}" == "true" ]; then
     createAndAttachVolume
   fi
+
+
 
 }
 
