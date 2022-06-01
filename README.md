@@ -7,13 +7,30 @@ including a docker based container infrastucture with a traefik v2 remote proxy.
 
 The setup of the server is done by using the hetzner hcloud-cli and cloud-init.
 
+## Content
+
+* [Prerequisite](#prerequisite)
+* [Create a hcloud token file](#create-a-hcloud-tokenlocal-file)
+* [Create a dns token file](#create-a-dns-tokenlocal-file)
+* [Get the DNS ZoneID](#get-the-dns-zoneid)
+* [Adjust the cloud-init.yml file](#adjust-the-hcloudcloud-inityml-file)
+* [Adjust the scripts/environment.sh file for the server parameters](#adjust-the-scriptsenvironmentsh-file-for-the-server-parameters)
+* [Adjust the scripts/environment.sh file for the containers](#adjust-the-scriptsenvironmentsh-file-for-the-containers)
+* [Create a password for traefik login](#create-a-password-for-traefik-login)
+* [Adjust the init-container.sh file](#adjust-the-init-containersh-file)
+* [Create a server](#create-a-server)
+* [Login to the server](#login-to-the-server)
+* [Delete the server](#delete-the-server)
+
+
 ## Prerequisite
 
 - bash console (windows cmd-line or PowerShell is not working). On Windows install [git bash](https://git-scm.com/downloads).
 - hcloud-cli from Hetzner [hcloud](hcloud/README.md).
-- _HCloud token_ from the Hetzner Cloud [hcloud](hcloud/README.md).
-- With the _DNS token_ records can be automatically synchronized with the [Hetzner DNS Api](https://dns.hetzner.com/).
-- You need to update your own project repository before creating a server. Therefore, you need a **fork** of this repository.
+- An created project at the [Hetzner Cloud](https://console.hetzner.cloud/projects).
+- A _HCloud token_ from the Hetzner Cloud [hcloud](hcloud/README.md).
+- A _DNS token_ to automatically synchronize DNS records with the [Hetzner DNS Api](https://dns.hetzner.com/).
+- A **fork** of this repository.
 **Go to GitHub and create a fork**. Any change of this repository requires a _commit and push_ before creating a server. This
 repository is cloned in the new created server and will be used to boot the container infrastructure.
 
@@ -38,7 +55,7 @@ registered at another registrar **without** transfering the dns-registration to 
 
 ![](readme/dns-token.png)
 
-### Get the DNS ZoneID and adjust 
+### Get the DNS ZoneID
 
 In order to access the dns api for the desired zone we need the ZoneID. 
 
@@ -100,7 +117,7 @@ export HCLOUD_USER_NAME="mbach"
 3. Arbitrary server name
 
 ```shell
-export SERVER_NAME="s004"
+export SERVER_NAME="s001"
 ```
 
 4. Server type as in https://www.hetzner.com/cloud
@@ -120,9 +137,9 @@ export SERVER_TYPE="cx11"
 
 5. Server image as in https://console.hetzner.cloud/projects/1414551/servers/create 
 
-Can be one of the image: centos-7, centos-stream-8, centos-stream-9, ubuntu-18.04, ubuntu-20.04, 
+Can be one of the images: centos-7, centos-stream-8, centos-stream-9, ubuntu-18.04, ubuntu-20.04, 
 ubuntu-22.04, debian-10, debian-11, fedora-35, fedora-36. There are also predefined app images 
-available like ruby, go, gitlab, docker-ce, lamp, nextcloud
+available like ruby, go, gitlab, docker-ce, lamp, nextcloud.
 
 ```shell
 export SERVER_IMAGE="ubuntu-20.04"
@@ -130,7 +147,7 @@ export SERVER_IMAGE="ubuntu-20.04"
 
 6. Server Location 
 
-The current list of server locations can be listed with _hcloud location list_
+The current list of server locations can be retrieved with _hcloud location list_
 
 | ID  | NAME | DESCRIPTION           | NETWORK ZONE | COUNTRY | CITY        |
 |-----|------|-----------------------|--------------|---------|-------------|
@@ -163,3 +180,132 @@ export USE_VOLUME="true"
 
 ### Adjust the scripts/environment.sh file for the containers
 
+1. Suddomain: A sub domain can be defined to allow same services with same domain on several servers. 
+In this example, the server name is part of the url.
+
+```shell
+export SUB_DOMAIN=".${SERVER_NAME}"
+```
+
+- Example with subdomain: monitor.s001.sintares.com
+- Example without subdomain: monitor.sintares.com
+
+If no subdomain is required, then SUB_DOMAIN=""
+
+
+```shell
+export BASE_URL="${SUB_DOMAIN}.${DOMAIN_URL}"
+```
+
+2. Service Name and URL for each service
+
+- monitor.s001.sintares.com: Traefik Reverse Proxy
+- portainer.s001.sintares.com: Container management
+
+```shell
+# Service Names
+export MONITOR_SVC="monitor${SUB_DOMAIN}"
+export PORTAINER_SVC="portainer${SUB_DOMAIN}"
+export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
+
+export BLOG_SVC="blog${SUB_DOMAIN}"
+export DBADMIN_SVC="db-admin${SUB_DOMAIN}"
+export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
+export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
+```
+
+```shell
+# URL's for installed applications
+export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
+export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
+export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
+
+export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
+export DBADMIN_URL="${DBADMIN_SVC}.${DOMAIN_URL}"
+export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
+export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
+```
+
+## Create a password for traefik login
+
+You can create the password for the traefik login with the help of the page: [https://htpasswdgenerator.de/](https://htpasswdgenerator.de/)
+
+- Username: admin
+- Password: <desired password>
+
+After clicking to [Generate] you can copy the password like : 
+
+``admin: $apr1$ugtkwsey$DKYix37/PkhQSN4xk/xHj0``
+
+to the file traefik/traefik_dynamic.toml.
+
+```toml
+[http.middlewares.simpleAuth.basicAuth]
+  users = [
+    "admin: $apr1$ugtkwsey$DKYix37/PkhQSN4xk/xHj0"
+  ]
+
+```
+
+Another option to create the file is with htpasswd (if available):
+
+```shell
+htpasswd -nb demo password
+```
+
+## Adjust the init-container.sh file
+
+The file init-container.sh is controlling which containers are going to get automatically started.
+
+
+
+## Create a server
+
+After adjusting all environment variable, the server can get created. 
+
+IMPORTANT STEPS after changig the repository:
+
+1. **Commit and push the repository**. createServer will not continue with an uncommited repository
+2. Enter in your bash command line **source cli**. The updated enviroment is available now.
+
+```shell
+source cli
+createServer
+```
+
+After the script has been terminated, wait 10 seconds, and you can login to your server:
+
+```shell
+login
+```
+
+The newly created server is installing and updating during about **2 minutes**. After 2 minutes the server
+is automatically rebooting. The login to the server is terminted. You need to login once more. 
+
+
+#### Important commands for verifying the infrastructure:
+
+```shell
+docker ps -a
+docker logs traefik
+```
+
+Open the browser an enter: 
+
+- https://monitor.s001.YOURDOMAIN
+
+Login with admin and the password you have chosen for the traefik login.
+
+## Login to the server
+
+Simply enter login for an ssh connection.
+
+```shell
+login
+```
+
+## Delete the server
+
+```shell
+deleteServer
+```
