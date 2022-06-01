@@ -28,6 +28,9 @@ cd "${PRJ_ROOT_DIR}/containers/wordpress" || exit
 cd "${PRJ_ROOT_DIR}/containers/todo" || exit
 ./start-todo-h2.sh
 
+# ========== SPRING BOOT DEMO-INITIAL  =================
+cd "${PRJ_ROOT_DIR}/containers/demo-initial" || exit
+./start-demo-initial-h2.sh
 
 
 cd "${PRJ_ROOT_DIR}" || exit
