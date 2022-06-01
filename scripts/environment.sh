@@ -17,7 +17,7 @@ export SERVER_TYPE="cx11"
 export SERVER_IMAGE="ubuntu-20.04"
 # List locations: hcloud location list
 export SERVER_LOCATION="hel1"
-# Ubuntu user and home directory
+# Ubuntu user and home directory, **do not change this name**
 export UBUNTU_USER=ubuntu
 export UBUNTU_HOME="/home/${UBUNTU_USER}"
 
@@ -53,9 +53,10 @@ export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 
 # Server name is in the base url to allow several servers for one url and
 # In this example, the server name is part of the url
-export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
-
 export SUB_DOMAIN=".${SERVER_NAME}"
+export BASE_URL="${SUB_DOMAIN}.${DOMAIN_URL}"
+
+
 # export SUB_DOMAIN=""
 
 # Service Names
