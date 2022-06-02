@@ -21,7 +21,9 @@ export SERVER_LOCATION="hel1"
 export UBUNTU_USER=ubuntu
 export UBUNTU_HOME="/home/${UBUNTU_USER}"
 
-# During server setup, this repo is cloned -> change it to your repo
+# The original repo ... will be replace in cloud-init-yml with your repo
+export GIT_ORIG_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
+# Your repo
 export GIT_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 
 # ================================ VOLUMES ========================================

@@ -87,9 +87,20 @@ function copySSHPairToRemote () {
 }
 
 function copyLocalToRemote () {
-   copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/traefik-v2-dev-ci-pipeline/local
-   copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/traefik-v2-dev-ci-pipeline/local
-   copyFileToRemote "${LOCAL_DIR}"/id_rsa.pub /home/ubuntu/traefik-v2-dev-ci-pipeline/local
-   copyFileToRemote "${LOCAL_DIR}"/id_rsa /home/ubuntu/traefik-v2-dev-ci-pipeline/local
-   ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod 600 /home/ubuntu/traefik-v2-dev-ci-pipeline/local/id_rsa"
+   copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+   copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa.pub /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+   ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod 600 /home/ubuntu/${GIT_PROJECT_NAME}/local/id_rsa"
+}
+
+
+function replaceRepositoryNameInCloudInit () {
+  if [[ "${GIT_ORIG_REPO}" != "${GIT_REPO}" ]] ; then
+    origName="${GIT_ORIG_REPO}"
+    newName="${GIT_REPO}"
+    sed -i "s#${origName}#${newName}#g" "${PRJ_ROOT_DIR}/hcloud/cloud-init.yml"
+    unset origName newName
+  fi
+
 }
