@@ -1,6 +1,6 @@
 echo "*** starting wordpress ***"
 
-if [ -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
+if [ ! -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
   mkdir "${CONTAINER_PERSISTENT_VOLUME}/secrets"
   echo "Creating secrets in ${CONTAINER_PERSISTENT_VOLUME}/secrets"
 fi
