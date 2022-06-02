@@ -78,9 +78,11 @@ runcmd:
   - chown ubuntu:ubuntu /home/ubuntu/.bash_profile
   # inhibits login messages
   - touch /home/ubuntu/.hushlogin
+  - chown ubuntu:ubuntu /home/ubuntu/.hushlogin
   - mkdir /home/ubuntu/data
   # creates a data folder
   - chmod u+rwx /home/ubuntu/data
+  - chown ubuntu:ubuntu /home/ubuntu/data
   - apt-get update -y
   # - reboot
 power_state:

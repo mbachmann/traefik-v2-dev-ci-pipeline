@@ -119,10 +119,14 @@ export LOCAL_DIR="$PRJ_ROOT_DIR/local"
 
 export LOCAL_DNS_DIR="${PRJ_ROOT_DIR}/local/dns-records"
 
-if [ ! "$HOSTNAME" = "$SERVER_NAME" ]; then
-  export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
-  export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
+
+if test -f "${LOCAL_DIR}/hcloud-token.local" ; then
+   export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
 fi
+if test -f "${LOCAL_DIR}/dns-token.local" ; then
+   export DNS_TOKEN=$(cat "${LOCAL_DIR}/dns-token.local")
+fi
+
 
 if [ "${USE_VOLUME}" == "true" ]; then
   export CONTAINER_PERSISTENT_VOLUME="${CONTAINER_VOLUME_DATA_FOLDER}"

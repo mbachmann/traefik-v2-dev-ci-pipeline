@@ -20,7 +20,7 @@ function createServer() {
   cd "${PRJ_ROOT_DIR}/hcloud" || exit
   hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
 
-  cd "${PRJ_ROOT_DIR}"
+  cd "${PRJ_ROOT_DIR}" || exit
 
   if [ "${USE_HETZNER_DNS_API}" == "true" ] ; then
     createAllDNSRecords
@@ -68,4 +68,28 @@ function deleteServer() {
   fi
 
 
+}
+
+#**
+# $1 source file to copy, e.g. "${LOCAL_DIR}"/id_rsa
+# $2 remote folder to copy, e.g. /home/ubuntu/.ssh
+function copyFileToRemote () {
+   sourcefile="$1"
+   target="$2"
+   scp  -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa "${sourcefile}"  ubuntu@"$IPV4":"${target}"
+   unset sourcefile target
+}
+
+function copySSHPairToRemote () {
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa.pub /home/ubuntu/.ssh
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa /home/ubuntu/.ssh
+   ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod 600 /home/ubuntu/.ssh/id_rsa"
+}
+
+function copyLocalToRemote () {
+   copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/traefik-v2-dev-ci-pipeline/local
+   copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/traefik-v2-dev-ci-pipeline/local
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa.pub /home/ubuntu/traefik-v2-dev-ci-pipeline/local
+   copyFileToRemote "${LOCAL_DIR}"/id_rsa /home/ubuntu/traefik-v2-dev-ci-pipeline/local
+   ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod 600 /home/ubuntu/traefik-v2-dev-ci-pipeline/local/id_rsa"
 }
