@@ -28,6 +28,7 @@ services:
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini"
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data:/var/www/html" # Full wordpress project  -
     container_name: wordpress
+    restart: unless-stopped
     secrets:
       - db_password
   mysql:
@@ -37,6 +38,7 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: /run/secrets/db_password
+    restart: unless-stopped
     networks:
       - internal
     labels:
@@ -54,7 +56,7 @@ services:
       - "traefik.http.routers.phpmyadmin.tls=true"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=lets-encrypt"
       - "traefik.port=80"
-    restart: always
+    restart: unless-stopped
     networks:
       - internal
       - proxy
@@ -77,6 +79,7 @@ services:
     networks:
       - internal
       - proxy
+    restart: unless-stopped
     depends_on:
       - mysql
     environment:
