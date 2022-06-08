@@ -109,7 +109,7 @@ packages:
   - curl
   - gnupg-agent
   - software-properties-common
-  - docker.io
+  - docker-ce
   - docker-ce-cli
   - docker-compose
   - docker-compose-plugin
