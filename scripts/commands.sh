@@ -10,7 +10,10 @@ function createServer() {
   echo "Configuration in environment.sh"
   printEnvironment
 
+  # Copy ssh public key to authorized keys
   addPublicKeyToCloudInit
+  # Copy Tokens und ssh key pair to remote based on COPY_TOKEN and COPY_SSH_KEYPAIR in environment.sh
+  copyLocalToRemote
 
   if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
     echo "The Server ${SERVER_NAME} already exists!"
@@ -87,11 +90,13 @@ function copySSHPairToRemote () {
 }
 
 function copyLocalToRemote () {
-   copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
-   copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
-   copyFileToRemote "${LOCAL_DIR}"/id_rsa.pub /home/ubuntu/"${GIT_PROJECT_NAME}"/local
-   copyFileToRemote "${LOCAL_DIR}"/id_rsa /home/ubuntu/"${GIT_PROJECT_NAME}"/local
-   ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod 600 /home/ubuntu/${GIT_PROJECT_NAME}/local/id_rsa"
+   if [ "${COPY_TOKEN}" == "true" ]; then
+        copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+        copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+   fi
+   if [ "${COPY_SSH_KEYPAIR}" == "true" ]; then
+     copySSHPairToRemote
+   fi
 }
 
 

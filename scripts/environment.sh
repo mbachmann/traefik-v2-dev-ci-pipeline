@@ -26,6 +26,12 @@ export GIT_ORIG_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 # Your repo
 export GIT_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 
+# ================================ LOCAL Folder ========================================
+# Copy Hcloud and DNS Token to Remote
+export COPY_TOKEN=true
+# Copy SSH Key Pair to remote
+export COPY_SSH_KEYPAIR=true
+
 # ================================ VOLUMES ========================================
 # USE_VOLUME true will create and attach a seperate volume to the server
 # The container persitent storage is on the server disc or on the attachted volume
