@@ -1,0 +1,44 @@
+version: '3.6'
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+services:
+  # The main front-end application.
+  jenkins-master:
+    # owm build in start-jenkins.sh
+    image: jenkins:jenkins-master
+    restart: unless-stopped
+    container_name: jenkins-master
+    environment:
+      JENKINS_ADMIN_ID: /run/secrets/jenkins_admin_id
+      JENKINS_ADMIN_PASSWORD: /run/secrets/jenkins_admin_password
+    networks:
+      - internal
+      - proxy
+    # expose:
+      - "8080"
+      # remove the '#' below only if you want access from remote JNLP agents
+      - "50000"
+    volumes:
+      # Ensure Jenkins content persist between restarts.
+      - "${CONTAINER_PERSISTENT_VOLUME}/jenkins/jenkins_home:/var/jenkins_home"
+      - "${CONTAINER_PERSISTENT_VOLUME}/jenkins/jenkins_downloads:/var/jenkins_home/downloads"
+      # docker volumes
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    labels:
+      - "traefik.http.routers.jenkins-master.rule=Host(`${JENKINS_URL}`)"
+      - "traefik.http.routers.jenkins-master.tls=true"
+      - "traefik.http.routers.jenkins-master.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
+    secrets:
+      - jenkins_admin_id
+      - jenkins_admin_password
+
+secrets:
+  jenkins_admin_id:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/jenkins_admin_id.txt"
+  jenkins_admin_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/jenkins_admin_password.txt"

@@ -1,4 +1,4 @@
-#cloud-config
+#cloud-docker
 groups:
   - docker
 users:
@@ -150,6 +150,7 @@ packages:
   - hcloud-cli
   - apt-transport-https
   - webmin
+  - pass
   - openjdk-17-jdk
 
 timezone: Europe/Zurich
@@ -176,10 +177,10 @@ runcmd:
   - export HOME=/home/ubuntu
   - chown ubuntu:ubuntu /home/ubuntu
     # clone git repo https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
-  - git config --global user.name "ubuntu"
-  - git config --global user.email "ubuntu@example.com"
-  - git config --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
-  - git config --global credential.helper cache
+  - git docker --global user.name "ubuntu"
+  - git docker --global user.email "ubuntu@example.com"
+  - git docker --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
+  - git docker --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
   # Prepare script init-container.sh and environment.sh

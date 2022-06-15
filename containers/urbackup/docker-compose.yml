@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  urbackup:
+    image: uroni/urbackup-server:latest
+    container_name: urbackup
+    restart: unless-stopped
+    environment:
+    #  - PUID=1000 # Enter the UID of the user who should own the files here
+    #  - PGID=1000  # Enter the GID of the user who should own the files here
+      - TZ=Europe/Zurich # Enter your timezone
+    volumes:
+      - "${CONTAINER_PERSISTENT_VOLUME}/urbackup/data:/var/urbackup
+      - "${CONTAINER_PERSISTENT_VOLUME}/urbackup/storage:/backups
+      # Uncomment the next line if you want to bind-mount the www-folder
+      #- /path/to/wwwfolder:/usr/share/urbackup
+    network_mode: "host"
+    # Activate the following two lines for BTRFS support
+    cap_add:
+      - SYS_ADMIN

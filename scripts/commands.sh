@@ -12,8 +12,7 @@ function createServer() {
 
   # Copy ssh public key to authorized keys
   addPublicKeyToCloudInit
-  # Copy Tokens und ssh key pair to remote based on COPY_TOKEN and COPY_SSH_KEYPAIR in environment.sh
-  copyLocalToRemote
+
 
   if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
     echo "The Server ${SERVER_NAME} already exists!"
@@ -33,7 +32,8 @@ function createServer() {
     createAndAttachVolume
   fi
 
-
+  # Copy Tokens und ssh key pair to remote based on COPY_TOKEN and COPY_SSH_KEYPAIR in environment.sh
+  copyLocalToRemote
 
 }
 

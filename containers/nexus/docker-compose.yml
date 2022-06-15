@@ -1,0 +1,37 @@
+version: "3.6"
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+
+services:
+  nexus:
+    image: sonatype/nexus3
+    restart: unless-stopped
+    container_name: nexus
+    environment:
+      - "REGISTRY_HTTP_RELATIVEURLS=true"
+      - "TZ=Europe/Zurich"
+    labels:
+      - "traefik.http.routers.webmin-web.rule=Host(`${NEXUS_URL}`)"
+      - "traefik.port=8081"
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexus.entrypoints=websecure"
+      - "traefik.http.routers.nexus.tls=true"
+      - "traefik.http.routers.nexus.tls.certresolver=lets-encrypt"
+      # Registry Endpoint
+      - "traefik.http.routers.registry.rule=Host(`${NEXUS_REGISTRY_URL}`)"
+      - "traefik.http.routers.registry.tls=true"
+      - "traefik.http.routers.registry.service=registry"
+      - "traefik.http.routers.registry.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
+      - "traefik.docker.network=proxy"
+    ports:
+      - 8081:8081
+    volumes:
+      - "${CONTAINER_PERSISTENT_VOLUME}/nexus/nexus_data:/nexus-data"
+    networks:
+      - internal
+      - proxy

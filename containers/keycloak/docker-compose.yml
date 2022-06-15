@@ -1,0 +1,88 @@
+version: "3.6"
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+
+services:
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    environment:
+      KEYCLOAK_USER: /run/secrets/keycloak_user
+      KEYCLOAK_PASSWORD: /run/secrets/keycloak_password
+      DB_VENDOR: MYSQL
+      DB_ADDR: keycloak-mysql
+      DB_USER: keycloak
+      DB_PASSWORD: /run/secrets/keycloak_db_password
+      DB_PORT: "3306"
+      DB_DATABASE: keycloak
+    volumes:
+      - ./import:/tmp/import
+    command:
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=dir"
+      - "-Dkeycloak.migration.dir=/tmp/import"
+    networks:
+      - internal
+      - proxy
+    secrets:
+      - keycloak_user
+      - keycloak_password
+      - keycloak_db_password
+    depends_on:
+      - keycloak-mysql
+    labels:
+      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_URL}`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
+
+  keycloak-mysql:
+    image: mysql:8.0.22
+    container_name: keycloak-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/keycloak_db_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: /run/secrets/keycloak_db_password
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+    volumes:
+      - "${CONTAINER_PERSISTENT_VOLUME}/keycloak/mysql:/var/lib/mysql"
+    secrets:
+      - keycloak_db_root_password
+      - keycloak_db_password
+
+  keycloak-adminer:
+    image: adminer:4.6.3-standalone
+    container_name: keycloak-adminer
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.keycloak-adminer.rule=Host(`${KEYCLOAK_DBADMIN_URL}`)"
+      - "traefik.http.routers.keycloak-adminer.tls=true"
+      - "traefik.http.routers.keycloak-adminer.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
+    networks:
+      - internal
+      - proxy
+    restart: unless-stopped
+    depends_on:
+      - keycloak-mysql
+    environment:
+      ADMINER_DEFAULT_SERVER: keycloak-mysql
+
+secrets:
+  keycloak_db_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_db_password.txt"
+  keycloak_db_root_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_db_root_password.txt"
+
+  keycloak_user:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_user.txt"
+  keycloak_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_password.txt"

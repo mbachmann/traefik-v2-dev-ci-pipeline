@@ -6,6 +6,10 @@ target/
 *.local
 **/id_rsa*
 local/dns-records
+local/secrets/**
+!local/secrets/.gitkeep
+!local/secrets/default
+!local/secrets/default/**
 
 ### STS ###
 .apt_generated

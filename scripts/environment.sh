@@ -75,6 +75,13 @@ export DEMO_INITIAL_SVC="demo-initial${SUB_DOMAIN}"
 export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
 export PORTAINER_SVC="portainer${SUB_DOMAIN}"
 export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
+export WEBMIN_SVC="webmin${SUB_DOMAIN}"
+export JENKINS_SVC="jenkins${SUB_DOMAIN}"
+export NEXUS_SVC="nexus${SUB_DOMAIN}"
+export NEXUS_REGISTRY_SVC="registry${SUB_DOMAIN}"
+export KEYCLOAK_DBADMIN_SVC="keycloak-db${SUB_DOMAIN}"
+export KEYCLOAK_SVC="keycloak${SUB_DOMAIN}"
+export KEYCLOAK_DBADMIN_SVC="keycloak-db${SUB_DOMAIN}"
 
 # URL's for installed applications
 export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
@@ -86,6 +93,13 @@ export DEMO_INITIAL_URL="${DEMO_INITIAL_SVC}.${DOMAIN_URL}"
 export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
 export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
 export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
+export WEBMIN_URL="${WEBMIN_SVC}.${DOMAIN_URL}"
+export JENKINS_URL="${JENKINS_SVC}.${DOMAIN_URL}"
+export NEXUS_URL="${NEXUS_SVC}.${DOMAIN_URL}"
+export NEXUS_REGISTRY_URL="${NEXUS_REGISTRY_SVC}.${DOMAIN_URL}"
+export KEYCLOAK_URL="${KEYCLOAK_SVC}.${DOMAIN_URL}"
+export KEYCLOAK_DBADMIN_URL="${KEYCLOAK_DBADMIN_SVC}.${DOMAIN_URL}"
+
 
 function createAllDNSRecords() {
   addDnsRecord "${MONITOR_SVC}"
@@ -97,6 +111,12 @@ function createAllDNSRecords() {
   addDnsRecord "${TODO_H2_SVC}"
   addDnsRecord "${DEMO_INITIAL_SVC}"
   addDnsRecord "${TODO_MYSQL_SVC}"
+  addDnsRecord "${WEBMIN_SVC}"
+  addDnsRecord "${JENKINS_SVC}"
+  addDnsRecord "${NEXUS_SVC}"
+  addDnsRecord "${NEXUS_REGISTRY_SVC}"
+  addDnsRecord "${KEYCLOAK_SVC}"
+  addDnsRecord "${KEYCLOAK_DBADMIN_SVC}"
 }
 
 function deleteAllDNSRecords() {
@@ -109,6 +129,12 @@ function deleteAllDNSRecords() {
   deleteDnsRecord "${TODO_H2_SVC}"
   deleteDnsRecord "${DEMO_INITIAL_SVC}"
   deleteDnsRecord "${TODO_MYSQL_SVC}"
+  deleteDnsRecord "${WEBMIN_SVC}"
+  deleteDnsRecord "${JENKINS_SVC}"
+  deleteDnsRecord "${NEXUS_SVC}"
+  deleteDnsRecord "${NEXUS_REGISTRY_SVC}"
+  deleteDnsRecord "${KEYCLOAK_SVC}"
+  deleteDnsRecord "${KEYCLOAK_DBADMIN_SVC}"
 }
 
 # ==================================== DO NOT CHANGE FROM HERE =========================

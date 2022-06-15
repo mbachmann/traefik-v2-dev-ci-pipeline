@@ -12,7 +12,7 @@ services:
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: /run/secrets/db_password
+      WORDPRESS_DB_PASSWORD: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: wordpress
     labels:
       - "traefik.http.routers.blog.rule=Host(`${BLOG_URL}`)"
@@ -25,19 +25,19 @@ services:
     depends_on:
       - mysql
     volumes:
-      - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini"
+      - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/docker/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini"
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data:/var/www/html" # Full wordpress project  -
     container_name: wordpress
     restart: unless-stopped
     secrets:
-      - db_password
+      - wordpress_db_password
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: /run/secrets/wordpress_db_root_password
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
-      MYSQL_PASSWORD: /run/secrets/db_password
+      MYSQL_PASSWORD: /run/secrets/wordpress_db_password
     restart: unless-stopped
     networks:
       - internal
@@ -46,8 +46,8 @@ services:
     volumes:
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/mysql:/var/lib/mysql"
     secrets:
-      - db_root_password
-      - db_password
+      - wordpress_db_root_password
+      - wordpress_db_password
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -63,11 +63,11 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_USER: root
-      PMA_PASSWORD: /run/secrets/db_root_password
+      # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
     expose:
       - 80
     secrets:
-      - db_root_password
+      - wordpress_db_root_password
 
   adminer:
     image: adminer:4.6.3-standalone
@@ -86,7 +86,7 @@ services:
       ADMINER_DEFAULT_SERVER: mysql
 
 secrets:
-  db_password:
-    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/db_password.txt"
-  db_root_password:
-    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/db_root_password.txt"
+  wordpress_db_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt"
+  wordpress_db_root_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"
