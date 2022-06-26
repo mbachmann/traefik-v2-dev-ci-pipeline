@@ -7,9 +7,9 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     # for webmin we can allow password login ... adjust also runcmd section of this file
-    lock_passwd: false
+    lock_passwd: true
     #  mkpasswd --method=SHA-512 --rounds=4096 password, attention - hash code can be cracked
-    passwd: $6$rounds=4096$T9.0VXXyj1os$PUKUmU.HfIvv3XoYBr0Gm4ruZ1S3Jm1uqkz.K.cR/x/CzlvNEXtcn1yw3D8Byg7nsm.90ThbB9PENoTnw/rTW1
+    # passwd: $6$rounds=4096$T9.0VXXyj1os$PUKUmU.HfIvv3XoYBr0Gm4ruZ1S3Jm1uqkz.K.cR/x/CzlvNEXtcn1yw3D8Byg7nsm.90ThbB9PENoTnw/rTW1
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3qXq80S4wl5dpFtHoGpEe0LERxaVgZimejhdbatE3FFodG33V2UgErkhdKogdqa5SwzKITOgUYVVingOUkocqn4U9kGN2HvtaWf6iyROi4bC+NiqYfYkHRt1ETQtWxDWtH5Bp4UlvdB6TNJuZAFNGRaeOiv79UNK7P7SClXFZ/w0lKGxwt30hZDT73rKjUnm/f09KcAmurM4YHPDqV70dKcGdR5pAoCxSvWvYjf9cc1Jy8jZAR4wt/kFBuu2F6YFpTn0ygY6Kg/1DufD7ggERqNGzKvbKvxNBmck7qxxTBGxZ7baqkrLBMkmZ2RvTjlnyE9jw9WrzebfHEFirwqJMtX8gPl7lpvkKvtykPQq/tXk2LZi+ycHRDeohLWrz5TIZ8Xjc8fnxuxiWuyvmHJrVjW5LkU6SjPoakzXNXTDlgN7Fde/N4A8uX6k7JUB9dA2jGJ/WyilDU6NeniDFDLqI2rX75UB2cb4KIPkEIGzIpK6AE6opwIlkAlNqGRByyMs= mbach@s001
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrscyixoq3xozuTYn0G3GNADNLnSaOAmkzC2ltiEvB6SNDGpTrYi/BstnexmfIqYwwaOMIgivhebYGgHlyTxn9WFS2060om7jsz8DnZKMpWLTLHQ4gC0IjnUJCb53NUCmo5/2KupM8bSWrZgupN65nvjr8LkYC5tZBqWKDuNo4YcSpfQwK0GGpVIW7rRV6zbl6EDIxGJbaWpDlY9Zy8hgVoBlfROJfHNCP7DMEosVsWC5RTLV+GfeboDS++JLjP6BEeDmk1FCLcZzybjQ4On80fzy2Vn1DQPpWIde5c1tgzGzDOD2NoluTmexkqBt24QmXL2W9406+QaNHcT0+Yb2Kleu2MSpp+NfIN0DPwbItNg9uk0p1TzWRDV2QTyxV4lMN9VeNOjN48YOi1K4/wX8u/0IikolqdMhmYC7JLst+Bxrp2VriZY2v5TV/3iEdtpn1DKWdvwHzfwpPEmzv0OWLSNBURa7EZtU3Hzu5u/veR0MTJzfGR3wOqEhvxcJlAb8= mbach@s001
