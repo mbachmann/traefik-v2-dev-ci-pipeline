@@ -1,4 +1,4 @@
-version: "3.6"
+version: "3.7"
 
 networks:
   proxy:
@@ -12,7 +12,7 @@ services:
     environment:
       WORDPRESS_DB_HOST: wordpress_mysql
       WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: /run/secrets/wordpress_db_password
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: wordpress
     labels:
       - "traefik.http.routers.blog.rule=Host(`${BLOG_URL}`)"
@@ -35,10 +35,10 @@ services:
     image: mysql:5.7
     container_name: wordpress_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/wordpress_db_root_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/wordpress_db_root_password
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
-      MYSQL_PASSWORD: /run/secrets/wordpress_db_password
+      MYSQL_PASSWORD_FILE: /run/secrets/wordpress_db_password
     restart: unless-stopped
     networks:
       - internal
@@ -63,7 +63,7 @@ services:
       - proxy
     environment:
       PMA_HOST: wordpress_mysql
-      # PMA_USER: root
+      PMA_USER: root
       # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
     expose:
       - 80

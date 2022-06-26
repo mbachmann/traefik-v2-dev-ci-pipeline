@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.7'
 networks:
   proxy:
     external: true
@@ -12,8 +12,8 @@ services:
     restart: unless-stopped
     container_name: jenkins-master
     environment:
-      JENKINS_ADMIN_ID: /run/secrets/jenkins_admin_id
-      JENKINS_ADMIN_PASSWORD: /run/secrets/jenkins_admin_password
+      JENKINS_ADMIN_ID_FILE: /run/secrets/jenkins_admin_id
+      JENKINS_ADMIN_PASSWORD_FILE: /run/secrets/jenkins_admin_password
     networks:
       - internal
       - proxy

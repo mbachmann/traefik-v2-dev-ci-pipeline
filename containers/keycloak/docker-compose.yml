@@ -1,4 +1,4 @@
-version: "3.6"
+version: "3.7"
 
 networks:
   proxy:
@@ -10,12 +10,12 @@ services:
   keycloak:
     image: jboss/keycloak:16.1.1
     environment:
-      KEYCLOAK_USER: /run/secrets/keycloak_user
-      KEYCLOAK_PASSWORD: /run/secrets/keycloak_password
+      KEYCLOAK_USER_FILE: /run/secrets/keycloak_user
+      KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak_password
       DB_VENDOR: MYSQL
       DB_ADDR: keycloak-mysql
       DB_USER: keycloak
-      DB_PASSWORD: /run/secrets/keycloak_db_password
+      DB_PASSWORD_FILE: /run/secrets/keycloak_db_password
       DB_PORT: "3306"
       DB_DATABASE: keycloak
     volumes:
@@ -44,10 +44,10 @@ services:
     container_name: keycloak-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/keycloak_db_root_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/keycloak_db_root_password
       MYSQL_DATABASE: wordpress
       MYSQL_USER: keycloak
-      MYSQL_PASSWORD: /run/secrets/keycloak_db_password
+      MYSQL_PASSWORD_FILE: /run/secrets/keycloak_db_password
     networks:
       - internal
     labels:
@@ -61,7 +61,6 @@ services:
   keycloak-adminer:
     image: adminer:4.6.3-standalone
     container_name: keycloak-adminer
-    restart: unless-stopped
     labels:
       - "traefik.http.routers.keycloak-adminer.rule=Host(`${KEYCLOAK_DBADMIN_URL}`)"
       - "traefik.http.routers.keycloak-adminer.tls=true"
