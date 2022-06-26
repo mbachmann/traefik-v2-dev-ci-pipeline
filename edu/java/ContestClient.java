@@ -1,4 +1,4 @@
-package ch.zhaw.solution.le07c.repetition;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;

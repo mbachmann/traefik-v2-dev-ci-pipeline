@@ -1,4 +1,4 @@
-package ch.teko.le04.task05;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
