@@ -277,3 +277,5 @@ You can now detach the volume from the server by calling.
 hcloud volume delete cas-oop-vol-01
 ```
 
+# Create a ubuntu password
+

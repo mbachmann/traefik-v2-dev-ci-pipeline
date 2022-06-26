@@ -6,10 +6,10 @@ if [ ! -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
 fi
 
 if [[ ! -f "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt" ]] ; then
-    echo "wordpress" > "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt"
+    echo -n "wordpress" > "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt"
 fi
 if [[ ! -f "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt" ]] ; then
-    echo "wordpress" > "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"
+    echo -n "wordpress" > "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"
 fi
 
 if [ ! "$(docker ps -q -f name=wordpress)" ]; then

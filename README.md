@@ -250,7 +250,7 @@ to the file traefik/traefik_dynamic.toml.
 Another option to create the file is with htpasswd (if available):
 
 ```shell
-htpasswd -nb demo password
+htpasswd -nb admin password
 ```
 
 ## Adjust the init-container.sh file
@@ -311,3 +311,6 @@ login
 ```shell
 deleteServer
 ```
+
+## Create a Password for Webmin login
+

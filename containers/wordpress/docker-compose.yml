@@ -10,7 +10,7 @@ services:
   blog:
     image: wordpress:4.9.8-apache
     environment:
-      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_HOST: wordpress_mysql
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: wordpress
@@ -23,7 +23,7 @@ services:
       - internal
       - proxy
     depends_on:
-      - mysql
+      - wordpress_mysql
     volumes:
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/docker/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini"
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data:/var/www/html" # Full wordpress project  -
@@ -31,8 +31,9 @@ services:
     restart: unless-stopped
     secrets:
       - wordpress_db_password
-  mysql:
+  wordpress_mysql:
     image: mysql:5.7
+    container_name: wordpress_mysql
     environment:
       MYSQL_ROOT_PASSWORD: /run/secrets/wordpress_db_root_password
       MYSQL_DATABASE: wordpress
@@ -61,11 +62,13 @@ services:
       - internal
       - proxy
     environment:
-      PMA_HOST: mysql
-      PMA_USER: root
+      PMA_HOST: wordpress_mysql
+      # PMA_USER: root
       # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
     expose:
       - 80
+    depends_on:
+      - wordpress_mysql
     secrets:
       - wordpress_db_root_password
 
@@ -81,9 +84,9 @@ services:
       - proxy
     restart: unless-stopped
     depends_on:
-      - mysql
+      - wordpress_mysql
     environment:
-      ADMINER_DEFAULT_SERVER: mysql
+      ADMINER_DEFAULT_SERVER: wordpress_mysql
 
 secrets:
   wordpress_db_password:
