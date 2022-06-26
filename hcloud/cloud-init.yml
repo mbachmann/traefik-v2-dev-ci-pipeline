@@ -1,4 +1,4 @@
-#cloud-docker
+#cloud-config
 groups:
   - docker
 users:
@@ -7,7 +7,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     # for webmin we can allow password login ... adjust also runcmd section of this file
-    lock_passwd: true
+    # lock_passwd: true
     #  mkpasswd --method=SHA-512 --rounds=4096 password, attention - hash code can be cracked
     # passwd: $6$rounds=4096$T9.0VXXyj1os$PUKUmU.HfIvv3XoYBr0Gm4ruZ1S3Jm1uqkz.K.cR/x/CzlvNEXtcn1yw3D8Byg7nsm.90ThbB9PENoTnw/rTW1
     ssh_authorized_keys:
@@ -177,10 +177,10 @@ runcmd:
   - export HOME=/home/ubuntu
   - chown ubuntu:ubuntu /home/ubuntu
     # clone git repo https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
-  - git docker --global user.name "ubuntu"
-  - git docker --global user.email "ubuntu@example.com"
-  - git docker --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
-  - git docker --global credential.helper cache
+  - git config --global user.name "ubuntu"
+  - git config --global user.email "ubuntu@example.com"
+  - git config --global --add safe.directory /home/ubuntu/traefik-v2-dev-ci-pipeline
+  - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
   # Prepare script init-container.sh and environment.sh
