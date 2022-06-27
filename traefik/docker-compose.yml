@@ -1,4 +1,10 @@
-version: '3'
+version: '3.8'
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
 
 services:
 
@@ -17,7 +23,10 @@ services:
     container_name: traefik
     restart: always
 
-networks:
-  proxy:
-    external: true
-
+  docker-host:
+    image: qoomon/docker-host
+    restart: unless-stopped
+    container_name: docker-host
+    cap_add: ["NET_ADMIN", "NET_RAW"]
+    networks:
+      - internal

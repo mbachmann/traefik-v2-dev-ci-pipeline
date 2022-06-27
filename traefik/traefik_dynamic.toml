@@ -3,11 +3,42 @@
     "admin:$apr1$KMQnKH2q$L755T7q1wTy/UOS/P.zk4/"
   ]
 
-[http.routers.api]
+[http]
+  [http.services]
+    [http.services.webmin.loadbalancer.servers]
+      url = ["http://docker-host:10000"]
 
-  rule = "Host(`MONITOR_URL`)"
-  entrypoints = ["websecure"]
-  middlewares = ["simpleAuth"]
-  service = "api@internal"
-  [http.routers.api.tls]
-    certResolver = "lets-encrypt"
+  [http.routers]
+    [http.routers.webmin]
+      rule = "Host(`WEBMIN_URL`)"
+      entrypoints = ["websecure"]
+      service = "webmin"
+      [http.routers.webmin.tls]
+        certResolver = "lets-encrypt"
+
+    [http.routers.api]
+      rule = "Host(`MONITOR_URL`)"
+      entrypoints = ["websecure"]
+      middlewares = ["simpleAuth"]
+      service = "api@internal"
+      [http.routers.api.tls]
+        certResolver = "lets-encrypt"
+
+[tls]
+  [tls.options]
+    [tls.options.minTLS12]
+      minVersion = "VersionTLS12"
+      preferServerCipherSuites = true
+      sniStrict = true
+      cipherSuites = [
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+        "TLS_AES_128_GCM_SHA256",
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256"
+      ]
+      curvePreferences = [
+        "CurveP521",
+        "CurveP384"
+      ]

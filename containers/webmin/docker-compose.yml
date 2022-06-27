@@ -3,28 +3,25 @@ version: "3.7"
 networks:
   proxy:
     external: true
-  internal:
-    external: false
+  local:
+    external: true
 
 services:
-  webmin-proxy:
+  docker-host:
     image: qoomon/docker-host
     restart: unless-stopped
-    container_name: webmin
+    container_name: docker-host
     cap_add: ["NET_ADMIN", "NET_RAW"]
     labels:
-#      - traefik.http.middlewares.webmin-redirect-websecure.redirectscheme.scheme=https
-#      - "traefik.http.routers.webmin-web.rule=Host(`${WEBMIN_URL}`)"
-#      - traefik.http.routers.webmin-web.entrypoints=web
-#      - traefik.http.routers.webmin-web.middlewares=webmin-redirect-websecure
-      - traefik.http.routers.webmin-websecure.entrypoints=websecure
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+#      - traefik.http.routers.webmin-websecure.entrypoints=websecure
       - "traefik.http.routers.webmin-websecure.rule=Host(`${WEBMIN_URL}`)"
       - traefik.http.routers.webmin-websecure.tls=true
       - traefik.http.routers.webmin-websecure.tls.certresolver=lets-encrypt
-      - traefik.http.routers.webmin-websecure.service=webmin
-      - traefik.http.services.webmin.loadbalancer.server.port=10000
+      - traefik.http.services.docker-host.loadbalancer.server.port=10000
 
  #     - "traefik.port=10000"
     networks:
-      - internal
+      - local
       - proxy

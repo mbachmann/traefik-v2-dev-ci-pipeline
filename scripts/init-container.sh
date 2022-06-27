@@ -14,6 +14,7 @@ find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
 echo "starting containers"
 # ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit
+./start-webmin.sh
 ./start-traefik.sh
 
 # ============ PORTAINER  =================
