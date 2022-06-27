@@ -63,7 +63,7 @@ services:
       - proxy
     environment:
       PMA_HOST: wordpress_mysql
-      PMA_USER: root
+      # PMA_USER: root
       # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
     expose:
       - 80

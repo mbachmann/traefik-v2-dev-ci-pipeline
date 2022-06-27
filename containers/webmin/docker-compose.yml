@@ -13,18 +13,18 @@ services:
     container_name: webmin
     cap_add: ["NET_ADMIN", "NET_RAW"]
     labels:
-      - traefik.enable=true
-      - traefik.http.middlewares.webmin-redirect-websecure.redirectscheme.scheme=https
-      - "traefik.http.routers.webmin-web.rule=Host(`${WEBMIN_URL}`)"
-      - traefik.http.routers.webmin-web.entrypoints=web
-      - traefik.http.routers.webmin-web.middlewares=webmin-redirect-websecure
+#      - traefik.http.middlewares.webmin-redirect-websecure.redirectscheme.scheme=https
+#      - "traefik.http.routers.webmin-web.rule=Host(`${WEBMIN_URL}`)"
+#      - traefik.http.routers.webmin-web.entrypoints=web
+#      - traefik.http.routers.webmin-web.middlewares=webmin-redirect-websecure
       - traefik.http.routers.webmin-websecure.entrypoints=websecure
       - "traefik.http.routers.webmin-websecure.rule=Host(`${WEBMIN_URL}`)"
-      - traefik.tags=proxy
-      - traefik.docker.network=proxy
       - traefik.http.routers.webmin-websecure.tls=true
       - traefik.http.routers.webmin-websecure.tls.certresolver=lets-encrypt
-      - traefik.http.services.webmin-global.loadbalancer.server.port=10000
+      - traefik.http.routers.webmin-websecure.service=webmin
+      - traefik.http.services.webmin.loadbalancer.server.port=10000
+
+ #     - "traefik.port=10000"
     networks:
       - internal
       - proxy

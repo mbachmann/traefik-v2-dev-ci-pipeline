@@ -15,9 +15,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - "${CONTAINER_PERSISTENT_VOLUME}/portainer_data:/data"
-    ports:
-      - 8000:8000
-      - 9000:9000
+#    ports:
+#      - 8000:8000
+#      - 9000:9000
     networks:
       - proxy
     security_opt:
@@ -35,9 +35,9 @@ services:
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
 
       # Edge
-      - "traefik.http.routers.edge.rule=Host(`${PORTAINER_EDGE_URL}`)"
-      - "traefik.http.routers.edge.entrypoints=websecure"
-      - "traefik.http.services.edge.loadbalancer.server.port=8000"
-      - "traefik.http.routers.edge.service=edge"
-      - "traefik.http.routers.edge.tls.certresolver=lets-encrypt"
+#      - "traefik.http.routers.edge.rule=Host(`${PORTAINER_EDGE_URL}`)"
+#      - "traefik.http.routers.edge.entrypoints=websecure"
+#      - "traefik.http.services.edge.loadbalancer.server.port=8000"
+#      - "traefik.http.routers.edge.service=edge"
+#      - "traefik.http.routers.edge.tls.certresolver=lets-encrypt"
     container_name: portainer
