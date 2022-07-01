@@ -3,6 +3,7 @@ echo "*** starting traefik ***"
 chmod 600 acme.json
 
 sed -i "s/MONITOR_URL/$MONITOR_URL/g" traefik_dynamic.toml
+sed -i "s/WEBMIN_URL/$WEBMIN_URL/g" traefik_dynamic.toml
 
 if [ ! "$(docker network ls | grep proxy)" ]; then
   echo "Creating proxy network ..."

@@ -1,26 +1,37 @@
+
+# entry points are basically just ports that will access
+# to Traefik and therefore to the services it proxies
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+    # set up a redirect for all requests to the https entry point
     [entryPoints.web.http.redirections.entryPoint]
       to = "websecure"
       scheme = "https"
 
   [entryPoints.websecure]
     address = ":443"
- # [entryPoints.portainer]
- #   address = ":9000"
 
+# enable the dashboard
 [api]
   dashboard = true
 
+[log]
+  level = "error"
+# ssl certificate resolvers: this is used to get certificates for domains.
 [certificatesResolvers.lets-encrypt.acme]
   email = "test@thdi.ch"
+  # that's where Traefik will put the certificates
   storage = "acme.json"
   [certificatesResolvers.lets-encrypt.acme.tlsChallenge]
 
+# providers: in our case that's what we proxy.
 [providers.docker]
   watch = true
   network = "proxy"
+  # turn off "auto-scraping" of containers by traffic
+  # otherwise it will try to proxy all containers
+  exposedByDefault = false
 
 [providers.file]
   filename = "traefik_dynamic.toml"

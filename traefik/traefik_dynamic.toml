@@ -5,14 +5,14 @@
 
 [http]
   [http.services]
-    [http.services.webmin.loadbalancer.servers]
-      url = ["http://docker-host:10000"]
+    [http.services.webmininternal.loadBalancer.servers]
+      url = "http://docker-host:10000
 
   [http.routers]
     [http.routers.webmin]
       rule = "Host(`WEBMIN_URL`)"
       entrypoints = ["websecure"]
-      service = "webmin"
+      service = "webmininternal"
       [http.routers.webmin.tls]
         certResolver = "lets-encrypt"
 

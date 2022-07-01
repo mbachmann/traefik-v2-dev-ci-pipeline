@@ -10,6 +10,8 @@ services:
   todoh2:
     image: uportal/todo-app:latest
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.todoh2.entrypoints=websecure"
       - "traefik.http.routers.todoh2.rule=Host(`${TODO_H2_URL}`)"
       - "traefik.http.routers.todoh2.tls=true"
       - "traefik.http.routers.todoh2.tls.certresolver=lets-encrypt"

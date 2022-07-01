@@ -10,6 +10,8 @@ services:
   demoinitial:
     image: uportal/demo-initial:latest
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.demoinitial.entrypoints=websecure"
       - "traefik.http.routers.demoinitial.rule=Host(`${DEMO_INITIAL_URL}`)"
       - "traefik.http.routers.demoinitial.tls=true"
       - "traefik.http.routers.demoinitial.tls.certresolver=lets-encrypt"

@@ -15,6 +15,8 @@ services:
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: wordpress
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.blog.entrypoints=websecure"
       - "traefik.http.routers.blog.rule=Host(`${BLOG_URL}`)"
       - "traefik.http.routers.blog.tls=true"
       - "traefik.http.routers.blog.tls.certresolver=lets-encrypt"
@@ -53,6 +55,8 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
       - "traefik.http.routers.phpmyadmin.rule=Host(`${DB_PHP_MYADMIN_URL}`)"
       - "traefik.http.routers.phpmyadmin.tls=true"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=lets-encrypt"
@@ -75,6 +79,8 @@ services:
   adminer:
     image: adminer:4.6.3-standalone
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adminer.entrypoints=websecure"
       - "traefik.http.routers.adminer.rule=Host(`${DBADMIN_URL}`)"
       - "traefik.http.routers.adminer.tls=true"
       - "traefik.http.routers.adminer.tls.certresolver=lets-encrypt"
