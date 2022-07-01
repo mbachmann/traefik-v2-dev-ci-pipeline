@@ -121,7 +121,7 @@ function deleteDnsRecord () {
   curl -X "DELETE" "https://dns.hetzner.com/api/v1/records/${DELETE_RECORD_ID}" \
       -k -s -H "Auth-API-Token: ${DNS_TOKEN}" # | json_pretty
 
-  echo "remove dns record file ${RECORD_FILE_NAME}."
+  echo "remove dns record file ${DELETE_RECORD_FILE_NAME}."
   rm  "${DELETE_RECORD_FILE_NAME}"
 
 }
