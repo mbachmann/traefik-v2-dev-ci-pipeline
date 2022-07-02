@@ -10,9 +10,9 @@ if [ ! "$(docker network ls | grep proxy)" ]; then
   docker network create proxy
 fi
 
-if [ ! "$(docker network ls | grep local)" ]; then
-  echo "Creating local network ..."
-  docker network create local
+if [ ! "$(docker network ls | grep localnet)" ]; then
+  echo "Creating localnet network ..."
+  docker network create localnet
 fi
 
 if [ ! "$(docker ps -q -f name=traefik)" ]; then

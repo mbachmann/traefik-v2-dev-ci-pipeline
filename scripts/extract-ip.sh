@@ -14,6 +14,3 @@ if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
 fi
 # echo "The IP is $IPV4"
 
-function getMyIp () {
-  export IPV4=$(curl ifconfig.me)
-}

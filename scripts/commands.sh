@@ -91,8 +91,9 @@ function copySSHPairToRemote () {
 
 function copyLocalToRemote () {
    if [ "${COPY_TOKEN}" == "true" ]; then
-        copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
-        copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+        mkdir -p /home/ubuntu/local
+        copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/local
+        copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/local
    fi
    if [ "${COPY_SSH_KEYPAIR}" == "true" ]; then
      copySSHPairToRemote

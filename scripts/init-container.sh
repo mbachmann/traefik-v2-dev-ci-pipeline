@@ -5,7 +5,6 @@ echo "current script folder: $CUR_SCRIPTDIR"
 source "$CUR_SCRIPTDIR"/environment.sh
 
 echo "project root folder: ${PRJ_ROOT_DIR}"
-
 echo "persistent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
 
 # make all .sh files executable
@@ -13,6 +12,9 @@ find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
 
 # Initialize the IPV4 variable
 getMyIp
+
+# move tokens if exist from /home/ubuntu/local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
+mv  -v /home/ubuntu/local/* /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 
 echo "starting containers"
 # ============ REVERSE PROXY =================

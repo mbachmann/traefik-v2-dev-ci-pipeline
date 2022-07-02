@@ -183,3 +183,7 @@ function printEnvironment() {
   echo LOCAL_DNS_DIR="${LOCAL_DNS_DIR}"
 
 }
+
+function getMyIp () {
+  export IPV4=$(curl ifconfig.me)
+}
