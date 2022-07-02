@@ -99,6 +99,12 @@ function copyLocalToRemote () {
    fi
 }
 
+function getContainerIp () {
+   containerName="$1"
+   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $containerName
+   unset containerName
+}
+
 
 function replaceRepositoryNameInCloudInit () {
   if [[ "${GIT_ORIG_REPO}" != "${GIT_REPO}" ]] ; then

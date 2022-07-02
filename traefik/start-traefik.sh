@@ -10,6 +10,11 @@ if [ ! "$(docker network ls | grep proxy)" ]; then
   docker network create proxy
 fi
 
+if [ ! "$(docker network ls | grep local)" ]; then
+  echo "Creating local network ..."
+  docker network create local
+fi
+
 if [ ! "$(docker ps -q -f name=traefik)" ]; then
    docker-compose up -d
 fi

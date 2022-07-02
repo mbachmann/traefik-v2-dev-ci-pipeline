@@ -11,6 +11,9 @@ echo "persistent volume folder: ${CONTAINER_PERSISTENT_VOLUME}"
 # make all .sh files executable
 find "${PRJ_ROOT_DIR}" -type f -iname "*.sh" -exec chmod +x {} \;
 
+# Initialize the IPV4 variable
+getMyIp
+
 echo "starting containers"
 # ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit

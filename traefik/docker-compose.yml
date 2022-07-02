@@ -3,11 +3,10 @@ version: '3.7'
 networks:
   proxy:
     external: true
-  internal:
-    external: false
+  local:
+    external: true
 
 services:
-
   traefik:
     image: traefik:v2.6.6
     ports:
@@ -15,6 +14,7 @@ services:
       - 443:443
     networks:
       - proxy
+      - local
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
@@ -29,4 +29,4 @@ services:
     container_name: docker-host
     cap_add: ["NET_ADMIN", "NET_RAW"]
     networks:
-      - internal
+      - local
