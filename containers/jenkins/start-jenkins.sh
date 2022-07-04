@@ -2,7 +2,9 @@ echo "*** starting jenkins ***"
 
 if [[ ! "$(docker images -q jenkins:jenkins-master 2> /dev/null)" == "" ]]; then
   echo "Build docker image for jenkins:jenkins-master"
+  cd ./docker || exit
   docker build -t jenkins:jenkins-master .
+  cd ..
 fi
 
 if [ ! -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
