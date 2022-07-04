@@ -19,6 +19,7 @@ mv  -v /home/ubuntu/local/* /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 echo "starting containers"
 # ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit
+./start-local-databases.sh
 ./start-webmin.sh
 ./start-traefik.sh
 
