@@ -16,6 +16,9 @@ getMyIp
 # move tokens if exist from /home/ubuntu/local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 mv  -v /home/ubuntu/local/* /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 
+# Adjust the root password for webmin login
+sudo sh -c 'echo root:ubuntu | chpasswd'
+
 echo "starting containers"
 # ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit
