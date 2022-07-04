@@ -109,10 +109,9 @@ export KEYCLOAK_URL="${KEYCLOAK_SVC}.${DOMAIN_URL}"
 export KEYCLOAK_DBADMIN_URL="${KEYCLOAK_DBADMIN_SVC}.${DOMAIN_URL}"
 
 
-function createAllDNSRecords() {
-  addDnsRecord "${SITE_SVC}"
 
 function createAllDNSRecords() {
+  addDnsRecord "${SITE_SVC}"
   addDnsRecord "${MONITOR_SVC}"
   addDnsRecord "${PORTAINER_SVC}"
   addDnsRecord "${PORTAINER_EDGE_SVC}"
@@ -130,6 +129,7 @@ function createAllDNSRecords() {
   addDnsRecord "${NEXUS_REGISTRY_SVC}"
   addDnsRecord "${KEYCLOAK_SVC}"
   addDnsRecord "${KEYCLOAK_DBADMIN_SVC}"
+
 }
 
 function deleteAllDNSRecords() {
