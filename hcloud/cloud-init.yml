@@ -152,6 +152,8 @@ packages:
   - webmin
   - pass
   - openjdk-17-jdk
+  - postgresql
+  - postgresql-contrib
 
 timezone: Europe/Zurich
 runcmd:
@@ -166,6 +168,7 @@ runcmd:
   - ufw allow 4242
   - ufw allow 9998
   - ufw allow 9999
+  - ufw allow 172.
 
   # Login from Hetzner hcloud default user is root PermitRootLogin yes or no
   - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
@@ -200,6 +203,10 @@ runcmd:
   # creates a data folder
   - chmod u+rwx /home/ubuntu/data
   - chown ubuntu:ubuntu /home/ubuntu/data
+  # Install MySQL, set root password
+  - echo "mysql-server mysql-server/root_password password pwd" | sudo debconf-set-selections
+  - echo "mysql-server mysql-server/root_password_again password pwd" | sudo debconf-set-selections
+  - sudo apt-get -y install mysql-server
   - apt-get update -y
   # - reboot
 power_state:
