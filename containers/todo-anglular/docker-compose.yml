@@ -1,0 +1,21 @@
+version: '3.6'
+
+
+networks:
+  proxy:
+    external: true
+
+services:
+
+  todo-angular:
+    image: uportal/todo-angular:latest
+
+    labels:
+      - "traefik.http.routers.todoangular.rule=Host(`${TODO_ANGULAR_URL}`)"
+      - "traefik.http.routers.todoangular.tls=true"
+      - "traefik.http.routers.todoangular.tls.certresolver=lets-encrypt"
+      - "traefik.port=80"
+    restart: unless-stopped
+    networks:
+      - proxy
+    container_name: todo-angular
