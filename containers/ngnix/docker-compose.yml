@@ -1,0 +1,21 @@
+version: '3.6'
+
+
+networks:
+  proxy:
+    external: true
+
+services:
+
+  nginx-site:
+    image: nginx:nginx-site
+
+    labels:
+      - "traefik.http.routers.nginxsite.rule=Host(`${SITE_URL}`)"
+      - "traefik.http.routers.nginxsite.tls=true"
+      - "traefik.http.routers.nginxsite.tls.certresolver=lets-encrypt"
+      - "traefik.port=80"
+    restart: unless-stopped
+    networks:
+      - proxy
+    container_name: nginx-site

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Traefik Reverse Proxy V2 - Docker Container Infrastructure</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Service</th>
+            <th scope="col">Service URL</th>
+            <th scope="col">Description</th>
+            <th scope="col">Help</th>
+        </tr>
+        </thead>
+
+        export SITE_URL="${SITE_SVC}.${DOMAIN_URL}"
+        export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
+        export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
+        export DBADMIN_URL="${DBADMIN_SVC}.${DOMAIN_URL}"
+        export DB_PHP_MYADMIN_URL="${DB_PHP_MYADMIN_SVC}.${DOMAIN_URL}"
+        export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
+        export TODO_ANGULAR_URL="${TODO_ANGULAR_SVC}.${DOMAIN_URL}"
+        export DEMO_INITIAL_URL="${DEMO_INITIAL_SVC}.${DOMAIN_URL}"
+        export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
+        export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
+        export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
+        export WEBMIN_URL="${WEBMIN_SVC}.${DOMAIN_URL}"
+        export JENKINS_URL="${JENKINS_SVC}.${DOMAIN_URL}"
+        export NEXUS_URL="${NEXUS_SVC}.${DOMAIN_URL}"
+        export NEXUS_REGISTRY_URL="${NEXUS_REGISTRY_SVC}.${DOMAIN_URL}"
+        export KEYCLOAK_URL="${KEYCLOAK_SVC}.${DOMAIN_URL}"
+        export KEYCLOAK_DBADMIN_URL="${KEYCLOAK_DBADMIN_SVC}.${DOMAIN_URL}"
+
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Traefik</td>
+            <td><a href="https://MONITOR_URL">MONITOR_URL</a></td>
+            <td>Reverse Proxy</td>
+            <td><a href="https://traefik.io/traefik/">traefik.io</a></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Portainer</td>
+            <td><a href="https://PORTAINER_URL">PORTAINER_URL</a></td>
+            <td>Container Management and Monitoring</td>
+            <td><a href="https://www.portainer.io/">portainer.io</a></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Webmin</td>
+            <td><a href="https://WEBMIN_URL">WEBMIN_URL</a></td>
+            <td>Linux Management</td>
+            <td><a href="https://www.webmin.com/">webmin.com</a></td>
+        </tr>
+
+        <tr>
+            <th scope="row">3</th>
+            <td>Urbackup</td>
+            <td><a href="https://URBACKUP_URL">URBACKUP_URL</a></td>
+            <td>Server Backup</td>
+            <td><a href="https://www.urbackup.org/">urbackup.org</a></td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>Keycloak</td>
+            <td><a href="https://KEYCLOAK_URL">KEYCLOAK_URL</a></td>
+            <td>Identity Manager</td>
+            <td><a href="https://www.keycloak.org/">keycloak.org</a></td>
+        </tr>
+        <tr>
+            <th scope="row">5</th>
+            <td>Keycloak MySQL</td>
+            <td><a href="https://KEYCLOAK_DBADMIN_URL">KEYCLOAK_DBADMIN_URL</a></td>
+            <td>MySQL Database for the Identity Manager</td>
+            <td><a href="https://www.mysql.com/">mysql.com</a></td>
+        </tr>
+
+        <tr>
+            <th scope="row">6</th>
+            <td>Nexus</td>
+            <td><a href="https://NEXUS_URL">NEXUS_URL</a></td>
+            <td>Artifact Storage and Docker Registry</td>
+            <td><a href="https://de.sonatype.com/products/nexus-repository">sonatype.com </a></td>
+        </tr>
+
+        <tr>
+            <th scope="row">7</th>
+            <td>Wordpress</td>
+            <td><a href="https://BLOG_URL">BLOG_URL</a></td>
+            <td>Content Management System</td>
+            <td><a href="https://wordpress.com/">wordpress.com</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
