@@ -13,6 +13,11 @@ function createServer() {
   # Copy ssh public key to authorized keys
   addPublicKeyToCloudInit
 
+  if [ ! "$(hcloud firewall list | grep ${FIREWALL_NAME})" ]; then
+     createFirewall
+  else
+    echo "${FIREWALL_NAME} already exists"
+  fi
 
   if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
     echo "The Server ${SERVER_NAME} already exists!"
@@ -20,7 +25,7 @@ function createServer() {
   fi
 
   cd "${PRJ_ROOT_DIR}/hcloud" || exit
-  hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
+  hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}" --firewall "${FIREWALL_NAME}"
 
   cd "${PRJ_ROOT_DIR}" || exit
 
@@ -91,7 +96,8 @@ function copySSHPairToRemote () {
 
 function copyLocalToRemote () {
    if [ "${COPY_TOKEN}" == "true" ]; then
-        mkdir -p /home/ubuntu/local
+        echo "Create remote folder /home/ubuntu/local"
+        ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "mkdir -p /home/ubuntu/local"
         copyFileToRemote "${LOCAL_DIR}"/hcloud-token.local /home/ubuntu/local
         copyFileToRemote "${LOCAL_DIR}"/dns-token.local /home/ubuntu/local
    fi
@@ -100,11 +106,7 @@ function copyLocalToRemote () {
    fi
 }
 
-function getContainerIp () {
-   containerName="$1"
-   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $containerName
-   unset containerName
-}
+
 
 
 function replaceRepositoryNameInCloudInit () {
