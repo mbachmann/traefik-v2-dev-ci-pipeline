@@ -42,5 +42,8 @@ else
   source ./commands.sh
 fi
 
-
-
+if [[  -f ./scripts/firewall.sh ]]; then
+  source ./scripts/firewall.sh
+else
+  source ./firewall.sh
+fi
