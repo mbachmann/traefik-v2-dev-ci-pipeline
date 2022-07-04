@@ -68,11 +68,14 @@ export SUB_DOMAIN=".${SERVER_NAME}"
 export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
 
 # Service Names
+export SITE_SVC="${SUB_DOMAIN}"
 export MONITOR_SVC="monitor${SUB_DOMAIN}"
 export BLOG_SVC="blog${SUB_DOMAIN}"
+export URBACKUP_SVC="urbackup${SUB_DOMAIN}"
 export DBADMIN_SVC="db-admin${SUB_DOMAIN}"
 export DB_PHP_MYADMIN_SVC="db-pypmyadmin${SUB_DOMAIN}"
 export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
+export TODO_ANGULAR_SVC="todo-angular${SUB_DOMAIN}"
 export DEMO_INITIAL_SVC="demo-initial${SUB_DOMAIN}"
 export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
 export PORTAINER_SVC="portainer${SUB_DOMAIN}"
@@ -86,11 +89,14 @@ export KEYCLOAK_SVC="keycloak${SUB_DOMAIN}"
 export KEYCLOAK_DBADMIN_SVC="keycloak-db${SUB_DOMAIN}"
 
 # URL's for installed applications
+export SITE_URL="${SITE_SVC}.${DOMAIN_URL}"
 export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
 export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
+export URBACKUP_URL="${URBACKUP_SVC}.${DOMAIN_URL}"
 export DBADMIN_URL="${DBADMIN_SVC}.${DOMAIN_URL}"
 export DB_PHP_MYADMIN_URL="${DB_PHP_MYADMIN_SVC}.${DOMAIN_URL}"
 export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
+export TODO_ANGULAR_URL="${TODO_ANGULAR_SVC}.${DOMAIN_URL}"
 export DEMO_INITIAL_URL="${DEMO_INITIAL_SVC}.${DOMAIN_URL}"
 export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
 export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
@@ -104,13 +110,18 @@ export KEYCLOAK_DBADMIN_URL="${KEYCLOAK_DBADMIN_SVC}.${DOMAIN_URL}"
 
 
 function createAllDNSRecords() {
+  addDnsRecord "${SITE_SVC}"
+
+function createAllDNSRecords() {
   addDnsRecord "${MONITOR_SVC}"
   addDnsRecord "${PORTAINER_SVC}"
   addDnsRecord "${PORTAINER_EDGE_SVC}"
   addDnsRecord "${BLOG_SVC}"
+  addDnsRecord "${URBACKUP_SVC}"
   addDnsRecord "${DBADMIN_SVC}"
   addDnsRecord "${DB_PHP_MYADMIN_SVC}"
   addDnsRecord "${TODO_H2_SVC}"
+  addDnsRecord "${TODO_ANGULAR_SVC}"
   addDnsRecord "${DEMO_INITIAL_SVC}"
   addDnsRecord "${TODO_MYSQL_SVC}"
   addDnsRecord "${WEBMIN_SVC}"
@@ -122,13 +133,16 @@ function createAllDNSRecords() {
 }
 
 function deleteAllDNSRecords() {
+  deleteDnsRecord "${SITE_SVC}"
   deleteDnsRecord "${MONITOR_SVC}"
   deleteDnsRecord "${PORTAINER_SVC}"
   deleteDnsRecord "${PORTAINER_EDGE_SVC}"
   deleteDnsRecord "${BLOG_SVC}"
+  deleteDnsRecord "${URBACKUP_SVC}"
   deleteDnsRecord "${DBADMIN_SVC}"
   deleteDnsRecord "${DB_PHP_MYADMIN_SVC}"
   deleteDnsRecord "${TODO_H2_SVC}"
+  deleteDnsRecord "${TODO_ANGULAR_SVC}"
   deleteDnsRecord "${DEMO_INITIAL_SVC}"
   deleteDnsRecord "${TODO_MYSQL_SVC}"
   deleteDnsRecord "${WEBMIN_SVC}"
