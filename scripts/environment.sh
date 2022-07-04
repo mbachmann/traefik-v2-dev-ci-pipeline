@@ -154,7 +154,8 @@ export PRJ_ROOT_DIR="$(dirname "$CUR_SCRIPTDIR")"
 export LOCAL_DIR="$PRJ_ROOT_DIR/local"
 
 export LOCAL_DNS_DIR="${PRJ_ROOT_DIR}/local/dns-records"
-
+export LOCAL_FIREWALL_DIR="${PRJ_ROOT_DIR}/local/firewall-records"
+export FIREWALL_NAME="${HCLOUD_PROJECT_NAME}-firewall"
 
 if test -f "${LOCAL_DIR}/hcloud-token.local" ; then
    export HCLOUD_TOKEN=$(cat "${LOCAL_DIR}/hcloud-token.local")
@@ -185,5 +186,12 @@ function printEnvironment() {
 }
 
 function getMyIp () {
-  export IPV4=$(curl ifconfig.me)
+  export IPV4=$(curl -s ifconfig.me)
+  echo $IPV4
+}
+
+function getContainerIp () {
+   containerName="$1"
+   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $containerName
+   unset containerName
 }
