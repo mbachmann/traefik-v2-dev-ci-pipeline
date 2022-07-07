@@ -154,6 +154,7 @@ packages:
   - openjdk-17-jdk
   - postgresql
   - postgresql-contrib
+  - mlocate
 
 timezone: Europe/Zurich
 runcmd:
@@ -168,14 +169,14 @@ runcmd:
   - ufw allow 4242
   - ufw allow 9998
   - ufw allow 9999
-  - ufw allow 172.
 
   # Login from Hetzner hcloud default user is root PermitRootLogin yes or no
   - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
   - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^#MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
-  - sed -i -e '/^#AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
+   # for ssh tunneling to mysql we need AllowTcpForwarding to yes
+  - sed -i -e '/^#AllowTcpForwarding/s/^.*$/AllowTcpForwarding yes/' /etc/ssh/sshd_config
   - sed -i -e '/^#AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^#AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers ubuntu' /etc/ssh/sshd_config
