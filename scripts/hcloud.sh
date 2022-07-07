@@ -47,3 +47,9 @@ if [[  -f ./scripts/firewall.sh ]]; then
 else
   source ./firewall.sh
 fi
+
+if [[  -f ./scripts/network.sh ]]; then
+  source ./scripts/network.sh
+else
+  source ./network.sh
+fi

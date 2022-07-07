@@ -13,19 +13,13 @@ function createServer() {
   # Copy ssh public key to authorized keys
   addPublicKeyToCloudInit
 
-  if [ ! "$(hcloud firewall list | grep ${FIREWALL_NAME})" ]; then
-     createFirewall
-  else
-    echo "${FIREWALL_NAME} already exists"
-  fi
-
   if [ "$(hcloud server list | grep ${SERVER_NAME})" ]; then
     echo "The Server ${SERVER_NAME} already exists!"
     return 1
   fi
 
   cd "${PRJ_ROOT_DIR}/hcloud" || exit
-  hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}" # --firewall "${FIREWALL_NAME}"
+  hcloud server create --image "${SERVER_IMAGE}" --type "${SERVER_TYPE}" --location "${SERVER_LOCATION}" --name "${SERVER_NAME}" --user-data-from-file cloud-init.yml --ssh-key "${SSH_KEY_NAME}"
 
   cd "${PRJ_ROOT_DIR}" || exit
 
@@ -39,6 +33,16 @@ function createServer() {
 
   # Copy Tokens und ssh key pair to remote based on COPY_TOKEN and COPY_SSH_KEYPAIR in environment.sh
   copyLocalToRemote
+  copySecrets
+  createNetworkAndAttachServer
+
+  if [ ! "$(hcloud firewall list | grep ${FIREWALL_NAME})" ]; then
+     createFirewall
+  else
+    echo "${FIREWALL_NAME} already exists"
+  fi
+  attachServerToFirewall
+
 
 }
 
@@ -106,8 +110,13 @@ function copyLocalToRemote () {
    fi
 }
 
+function copySecrets () {
+   sourcefile="${LOCAL_DIR}"/secrets
+   target="${CONTAINER_PERSISTENT_VOLUME}"/
+   scp  -r -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa "${sourcefile}"  ubuntu@"$IPV4":"${target}"
+   unset sourcefile target
 
-
+}
 
 function replaceRepositoryNameInCloudInit () {
   if [[ "${GIT_ORIG_REPO}" != "${GIT_REPO}" ]] ; then
@@ -116,5 +125,22 @@ function replaceRepositoryNameInCloudInit () {
     sed -i "s#${origName}#${newName}#g" "${PRJ_ROOT_DIR}/hcloud/cloud-init.yml"
     unset origName newName
   fi
+}
 
+
+function create3306Tunnel() {
+  echo "create tunnel to ubuntu@$IPV4 with port 3336->3306"
+  ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"${IPV4}"  -N -L 3336:127.0.0.1:3306
+}
+
+function create5432Tunnel() {
+  echo "create tunnel to ubuntu@$IPV4 with port 54321->5432"
+  ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"${IPV4}"  -N -L 54321:127.0.0.1:5432
+}
+
+function initPsqlDatabaseFromRemote() {
+   ssh -t -t -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"${IPV4}" sudo -u postgres psql -t -A -F"," <<'EOF'
+\q
+exit
+EOF
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function createFirewall()  {
-    echo Creates a firewall
+    echo "Creates a firewall"
     FIREWALL_FILE_NAME="${LOCAL_FIREWALL_DIR}/firewall.json"
     CREATE_RESPONSE=$(curl -X "POST" "https://api.hetzner.cloud/v1/firewalls" \
          -H 'Content-Type: application/json' \
@@ -82,4 +82,14 @@ function createFirewall()  {
     echo "The record id is written to file ${FIREWALL_FILE_NAME}"
     touch "${FIREWALL_FILE_NAME}"
     echo "${CREATE_RECORD_ID}" > "${FIREWALL_FILE_NAME}"
+}
+
+function attachServerToFirewall() {
+   echo "Attach server ${SERVER_NAME} to firewall ${FIREWALL_NAME}"
+   hcloud firewall apply-to-resource "${FIREWALL_NAME}" --type server --server "${SERVER_NAME}"
+}
+
+function detachServerFromFirewall() {
+   echo "Detach server ${SERVER_NAME} from firewall ${FIREWALL_NAME}"
+   hcloud firewall remove-from-resource "${FIREWALL_NAME}" --type server --server "${SERVER_NAME}"
 }

@@ -10,8 +10,8 @@ export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
 export SERVER_NAME="s001"
 # Server type as in https://www.hetzner.com/cloud
-# List server types: hcloud server-type list
-export SERVER_TYPE="cx11"
+# List server types: hcloud server-type list cx11 2GB Ram, cx21 4GB Ram
+export SERVER_TYPE="cx21"
 # Server image as in https://console.hetzner.cloud/projects/1414551/servers/create
 # List images: hcloud image list
 export SERVER_IMAGE="ubuntu-20.04"
@@ -20,6 +20,11 @@ export SERVER_LOCATION="hel1"
 # Ubuntu user and home directory, **do not change this name**
 export UBUNTU_USER=ubuntu
 export UBUNTU_HOME="/home/${UBUNTU_USER}"
+
+# ============= network ==============
+export HCLOUD_NETWORK_NAME="${HCLOUD_PROJECT_NAME}-network"
+# each server needs an unique ip address
+export PRIVATE_IPV4=10.0.0.11
 
 # The original repo == DO NOT CHANGE ==
 export GIT_PROJECT_NAME=traefik-v2-dev-ci-pipeline
@@ -196,7 +201,7 @@ function printEnvironment() {
   echo PRJ_ROOT_DIR="${PRJ_ROOT_DIR}"
   echo SSH_KEY_NAME="${SSH_KEY_NAME}"
   echo LOCAL_DNS_DIR="${LOCAL_DNS_DIR}"
-
+  echo IPV4="$IPV4"
 }
 
 function getMyIp () {
@@ -208,4 +213,48 @@ function getContainerIp () {
    containerName="$1"
    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $containerName
    unset containerName
+}
+
+#  sudo nano /etc/postgresql/12/main/pg_hba.conf
+#  set peer to md5 for
+#  local   all             postgres                                md5
+#  local   all             all                                     md5
+
+function setPsqlPassword () {
+  rootpassword="$1"
+  sudo -u postgres psql -c "ALTER USER postgres PASSWORD '${rootpassword}';"
+  unset rootpassword
+}
+
+function initPsqlDatabase() {
+   sudo -u postgres psql -t -A -F"," <<'EOF'
+\q
+exit
+EOF
+}
+
+# This function works after setting password to postgres user
+function createPsqlUserAndDatabase () {
+   rootpassword="$1"
+   username="$2"
+   psqlpassword="$3"
+   database="$4"
+   PGPASSWORD=${rootpassword}  psql -U postgres -c  "create user ${username} with encrypted password '${psqlpassword}'";
+   PGPASSWORD=${rootpassword}  psql -U postgres -c  "create database ${database};"
+   PGPASSWORD=${rootpassword}  psql -U postgres -c  "grant all privileges on database ${database} to ${username};"
+   unset rootpassword
+   unset username
+   unset psqlpassword
+   unset database
+}
+
+
+# This function works after setting password to postgres user
+function loginToPsql() {
+   PGPASSWORD=postgres psql -U postgres
+   # PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -d ubuntu
+}
+
+function loginToMysql() {
+   mysql -u root -p'ubuntu'
 }
