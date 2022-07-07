@@ -18,6 +18,7 @@ then
  sudo /etc/webmin/restart
  # Open firewall to webmin service on localhost for containers
  sudo ufw  allow  from 172.16.0.0/12 to any port 10000
+ sudo ufw  allow  from 10.0.0.0/24 to any port 10000
 
 fi
 
