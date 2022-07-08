@@ -8,7 +8,8 @@ export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
 # Arbitrary server name
-export SERVER_NAME="s001"
+export SERVER_NUMBER="11"
+export SERVER_NAME="s${SERVER_NUMBER}"
 # Server type as in https://www.hetzner.com/cloud
 # List server types: hcloud server-type list cx11 2GB Ram, cx21 4GB Ram
 export SERVER_TYPE="cx21"
@@ -24,7 +25,7 @@ export UBUNTU_HOME="/home/${UBUNTU_USER}"
 # ============= network ==============
 export HCLOUD_NETWORK_NAME="${HCLOUD_PROJECT_NAME}-network"
 # each server needs an unique ip address
-export PRIVATE_IPV4=10.0.0.11
+export PRIVATE_IPV4=10.0.0."${SERVER_NUMBER}"
 
 # The original repo == DO NOT CHANGE ==
 export GIT_PROJECT_NAME=traefik-v2-dev-ci-pipeline
