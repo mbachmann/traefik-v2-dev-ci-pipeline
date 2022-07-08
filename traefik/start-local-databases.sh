@@ -10,8 +10,12 @@ isPostgresInit="${PRJ_ROOT_DIR}"/local/database-records/postgresinit
 if [[ ! -f "$isMysqlInit" ]]; then
     echo "$isMysqlInit  not exists."
     mysql_root_password=ubuntu
+    sudo systemctl stop mysql
+    sudo systemctl status mysql
     echo "set mysql binding to 0.0.0.0 and set root password"
     sudo sed -i "s/127.0.0.1/0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo systemctl start mysql
+    sudo systemctl status mysql
     mysqladmin --user=root --password=pwd password \""${mysql_root_password}"\"
     echo "set firewall rules for mysql"
     sudo ufw allow from 172.16.0.0/12 to any port 3306
@@ -25,18 +29,20 @@ fi
 if [ "${USE_VOLUME}" == "true" ]; then
   mysqldir="${databasedir}/mysql"
   if [ ! -d "$mysqldir" ]; then
-    echo "Set the datadir to $databasedir"
+    echo "mysql: Set the datadir to $databasedir"
     sudo systemctl stop mysql
+    sudo systemctl status mysql
     sudo rsync -av /var/lib/mysql "${databasedir}"
     sudo mv /var/lib/mysql /var/lib/mysql.bak
     sudo sed -i "s|/var/lib/mysql|${mysqldir}|" /etc/mysql/mysql.conf.d/mysqld.cnf
     sudo sed -i "s|# datadir|datadir|" /etc/mysql/mysql.conf.d/mysqld.cnf
     sudo sed -i -e '$aalias /var/lib/mysql/ -> '"${mysqldir}"'/,' /etc/apparmor.d/tunables/alias
     sudo systemctl restart apparmor
+    sudo systemctl status apparmor
     sudo rm -Rf /var/lib/mysql.bak
     sudo systemctl start mysql
   else
-    echo "link data_directory to exisiting database files in ${databasedir}/mysql"
+    echo "mysql: link data_directory to exisiting database files in ${databasedir}/mysql"
     sudo systemctl stop mysql
     sudo sed -i "s|/var/lib/mysql|${mysqldir}|" /etc/mysql/mysql.conf.d/mysqld.cnf
     sudo sed -i "s|# datadir|datadir|" /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -44,6 +50,7 @@ if [ "${USE_VOLUME}" == "true" ]; then
       echo "add: alias /var/lib/mysql/ -> ${mysqldir} to /etc/apparmor.d/tunables/alias"
       sudo sed -i -e '$aalias /var/lib/mysql/ -> '"${mysqldir}"'/,' /etc/apparmor.d/tunables/alias
       sudo systemctl restart apparmor
+      sudo systemctl status apparmor
     fi
     sudo systemctl start mysql
   fi
@@ -52,7 +59,7 @@ fi
 
 # ============== prepare postgres (binding, root password, firewall, create database ubuntu) ================
 
-postgresversion=$(locate bin/postgres | tr -dc '0-9') ; echo $postgresversion
+postgresversion=$(locate bin/postgres | tr -dc '0-9') ; echo "postgres version is $postgresversion"
 
 if [[ ! -f "$isPostgresInit" ]]; then
     echo "$isPostgresInit  not exists."
@@ -60,11 +67,16 @@ if [[ ! -f "$isPostgresInit" ]]; then
     postgres_root_password=postgres
     echo "set psql binding to 0.0.0.0 and set root password"
     echo "check with: netstat -nlt"
+    sudo systemctl stop postgresql
+    sudo systemctl status postgresql
     sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
     sudo sed -i "s/peer/md5/" /etc/postgresql/12/main/pg_hba.conf
+    sudo systemctl start postgresql
+    sudo systemctl status postgresql
     setPsqlPassword "${postgres_root_password}"
     sudo service postgresql restart
-    echo "create ubuntu user and ubuntu database"
+    sudo systemctl status postgresql
+    echo "postgres: create ubuntu user and ubuntu database"
     createPsqlUserAndDatabase "${postgres_root_password}" ubuntu ubuntu ubuntu
     echo "set firewall rules for postgres"
     sudo ufw allow from 172.16.0.0/12 to any port 5432
@@ -80,6 +92,7 @@ if [ "${USE_VOLUME}" == "true" ]; then
   if [ ! -d "$postgresdir" ]; then
     echo "Set the data_directory to $databasedir"
     sudo systemctl stop postgresql
+    sudo systemctl status postgresql
     sudo rsync -av /var/lib/postgresql "${databasedir}"
     sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
     sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
@@ -88,6 +101,7 @@ if [ "${USE_VOLUME}" == "true" ]; then
   else
     echo "link data_directory to exisiting database files in ${databasedir}/postgresql"
     sudo systemctl stop postgresql
+    sudo systemctl status postgresql
     sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
     sudo systemctl start postgresql
   fi
