@@ -36,8 +36,8 @@ function createAndAttachVolume() {
           ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo mkdir /mnt/${VOLUME_MOUNT_NAME}"
           ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo mount -o discard,defaults ${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME}"
           ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "echo '${LINUXVOL} /mnt/${VOLUME_MOUNT_NAME} ext4 discard,nofail,defaults 0 0' | sudo tee -a /etc/fstab"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chown -R ubuntu:ubuntu /mnt/${VOLUME_MOUNT_NAME}"
-          ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod -R g+rwx /mnt/${VOLUME_MOUNT_NAME}"
+          # ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chown -R ubuntu:ubuntu /mnt/${VOLUME_MOUNT_NAME}"
+          # ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "${LOCAL_DIR}"/id_rsa ubuntu@"$IPV4" "sudo chmod -R g+rwx /mnt/${VOLUME_MOUNT_NAME}"
         fi
       fi
     else
