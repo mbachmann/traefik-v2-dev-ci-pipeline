@@ -72,13 +72,9 @@ if [[ ! -f "$isPostgresInit" ]]; then
     postgres_root_password=postgres
     echo "postgres: set psql binding to 0.0.0.0 and set root password"
     echo "postgres: check with: netstat -nlt"
-    sudo systemctl stop postgresql
-    sudo systemctl status postgresql
+    setPsqlPassword "${postgres_root_password}"
     sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
     sudo sed -i "s/peer/md5/" /etc/postgresql/12/main/pg_hba.conf
-    sudo systemctl start postgresql
-    sudo systemctl status postgresql
-    setPsqlPassword "${postgres_root_password}"
     sudo service postgresql restart
     sudo systemctl status postgresql
     echo "postgres: create ubuntu user and ubuntu database"
