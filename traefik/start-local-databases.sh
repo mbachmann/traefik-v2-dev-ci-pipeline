@@ -47,7 +47,7 @@ if [ "${USE_VOLUME}" == "true" ]; then
     sudo sed -i "s|/var/lib/mysql|${mysqldir}|" /etc/mysql/mysql.conf.d/mysqld.cnf
     sudo sed -i "s|# datadir|datadir|" /etc/mysql/mysql.conf.d/mysqld.cnf
     if  [[ $(sudo grep -L   ${mysqldir} /etc/apparmor.d/tunables/alias) ]]  ; then
-      echo "add: alias /var/lib/mysql/ -> ${mysqldir} to /etc/apparmor.d/tunables/alias"
+      echo "mysql add: alias /var/lib/mysql/ -> ${mysqldir} to /etc/apparmor.d/tunables/alias"
       sudo sed -i -e '$aalias /var/lib/mysql/ -> '"${mysqldir}"'/,' /etc/apparmor.d/tunables/alias
       sudo systemctl restart apparmor
       sudo systemctl status apparmor
@@ -65,8 +65,8 @@ if [[ ! -f "$isPostgresInit" ]]; then
     echo "$isPostgresInit  not exists."
 
     postgres_root_password=postgres
-    echo "set psql binding to 0.0.0.0 and set root password"
-    echo "check with: netstat -nlt"
+    echo "postgres: set psql binding to 0.0.0.0 and set root password"
+    echo "postgres: check with: netstat -nlt"
     sudo systemctl stop postgresql
     sudo systemctl status postgresql
     sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
@@ -78,7 +78,7 @@ if [[ ! -f "$isPostgresInit" ]]; then
     sudo systemctl status postgresql
     echo "postgres: create ubuntu user and ubuntu database"
     createPsqlUserAndDatabase "${postgres_root_password}" ubuntu ubuntu ubuntu
-    echo "set firewall rules for postgres"
+    echo "postgres: set firewall rules for postgres"
     sudo ufw allow from 172.16.0.0/12 to any port 5432
     sudo ufw allow from 10.0.0.0/24 to any port 5432
     unset postgres_root_password
@@ -90,20 +90,20 @@ fi
 if [ "${USE_VOLUME}" == "true" ]; then
   postgresdir="${databasedir}/postgresql"
   if [ ! -d "$postgresdir" ]; then
-    echo "Set the data_directory to $databasedir"
-    sudo systemctl stop postgresql
-    sudo systemctl status postgresql
-    sudo rsync -av /var/lib/postgresql "${databasedir}"
-    sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
-    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
-    sudo rm -Rf /var/lib/postgresql/12/main.bak
-    sudo systemctl start postgresql
+#    echo "postgres: Set the data_directory to $databasedir"
+#    sudo systemctl stop postgresql
+#    sudo systemctl status postgresql
+#    sudo rsync -av /var/lib/postgresql "${databasedir}"
+#    sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
+#    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
+#    sudo rm -Rf /var/lib/postgresql/12/main.bak
+#    sudo systemctl start postgresql
   else
-    echo "link data_directory to exisiting database files in ${databasedir}/postgresql"
-    sudo systemctl stop postgresql
-    sudo systemctl status postgresql
-    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
-    sudo systemctl start postgresql
+#    echo "postgres: link data_directory to exisiting database files in ${databasedir}/postgresql"
+ #   sudo systemctl stop postgresql
+#    sudo systemctl status postgresql
+#    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
+#    sudo systemctl start postgresql
   fi
   unset postgresdir
 fi
