@@ -91,20 +91,20 @@ fi
 if [ "${USE_VOLUME}" == "true" ]; then
   postgresdir="${databasedir}/postgresql"
   if [ ! -d "$postgresdir" ]; then
-#    echo "postgres: Set the data_directory to $databasedir"
-#    sudo systemctl stop postgresql
-#    sudo systemctl status postgresql
-#    sudo rsync -av /var/lib/postgresql "${databasedir}"
-#    sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
-#    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
-#    sudo rm -Rf /var/lib/postgresql/12/main.bak
-#    sudo systemctl start postgresql
+    echo "postgres: Set the data_directory to $databasedir"
+    sudo systemctl stop postgresql
+    sudo systemctl status postgresql
+    sudo rsync -av /var/lib/postgresql "${databasedir}"
+    sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
+    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
+    sudo rm -Rf /var/lib/postgresql/12/main.bak
+    sudo systemctl start postgresql
   else
-#    echo "postgres: link data_directory to exisiting database files in ${databasedir}/postgresql"
- #   sudo systemctl stop postgresql
-#    sudo systemctl status postgresql
-#    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
-#    sudo systemctl start postgresql
+    echo "postgres: link data_directory to exisiting database files in ${databasedir}/postgresql"
+    sudo systemctl stop postgresql
+    sudo systemctl status postgresql
+    sudo sed -i "s#data_directory = '/var/lib/postgresql/12/main'#data_directory = '${postgresdir}/12/main'#" /etc/postgresql/12/main/postgresql.conf
+    sudo systemctl start postgresql
   fi
   unset postgresdir
 fi
