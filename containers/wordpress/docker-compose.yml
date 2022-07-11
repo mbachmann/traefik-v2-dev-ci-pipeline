@@ -5,6 +5,8 @@ networks:
     external: true
   internal:
     external: false
+  localnet:
+    external: true
 
 services:
   blog:
@@ -65,8 +67,9 @@ services:
     networks:
       - internal
       - proxy
-    environment:
-      PMA_HOST: wordpress_mysql
+      - localnet
+    # environment:
+      # PMA_HOST: wordpress_mysql
       # PMA_USER: root
       # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
     expose:
@@ -88,6 +91,7 @@ services:
     networks:
       - internal
       - proxy
+      - localnet
     restart: unless-stopped
     depends_on:
       - wordpress_mysql
