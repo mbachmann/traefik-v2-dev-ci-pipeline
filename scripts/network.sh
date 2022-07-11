@@ -8,5 +8,6 @@ function createNetworkAndAttachServer () {
      hcloud network add-subnet "${HCLOUD_NETWORK_NAME}" --network-zone eu-central --type server --ip-range 10.0.0.0/24
   fi
 
+  echo "Attach server ${SERVER_NAME} to network ${HCLOUD_NETWORK_NAME} with ip ${PRIVATE_IPV4} (public ip: ${IPV4})"
   hcloud server attach-to-network "${SERVER_NAME}" --network "${HCLOUD_NETWORK_NAME}" --ip "${PRIVATE_IPV4}"
 }
