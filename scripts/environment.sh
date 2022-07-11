@@ -74,7 +74,7 @@ export SUB_DOMAIN=".${SERVER_NAME}"
 export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
 
 # Service Names
-export SITE_SVC="${SUB_DOMAIN}"
+export SITE_SVC="${SERVER_NAME}"
 export MONITOR_SVC="monitor${SUB_DOMAIN}"
 export BLOG_SVC="blog${SUB_DOMAIN}"
 export URBACKUP_SVC="urbackup${SUB_DOMAIN}"
