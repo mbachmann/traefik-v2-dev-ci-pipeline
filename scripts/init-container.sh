@@ -22,6 +22,7 @@ sudo sh -c 'echo root:ubuntu | chpasswd'
 echo "starting containers"
 # ============ REVERSE PROXY =================
 cd "${PRJ_ROOT_DIR}/traefik" || exit
+./docker-to-other-disc.sh
 ./start-local-databases.sh
 ./start-webmin.sh
 ./start-traefik.sh
