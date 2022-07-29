@@ -22,5 +22,10 @@ if [ "${USE_VOLUME}" == "true" ]; then
   sudo systemctl start docker
 
   ps aux | grep -i docker | grep -v grep
+
+  # delete all containers
+  docker stop $(docker ps -a -q)
+  docker rm $(docker ps -a -q)
+
   unset dockerdir
 fi
