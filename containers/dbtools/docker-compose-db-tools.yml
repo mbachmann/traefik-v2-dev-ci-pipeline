@@ -1,0 +1,65 @@
+version: "3.7"
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+  localnet:
+    external: true
+
+services:
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`${DB_PHP_MYADMIN_URL}`)"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=lets-encrypt"
+      - "traefik.port=80"
+    restart: unless-stopped
+    container_name: phpmyadmin
+    networks:
+      - internal
+      - proxy
+      - localnet
+    environment:
+      PMA_ARBITRARY: 1
+      # PMA_HOSTS: wordpress_mysql, docker_host, $PRIVATE_IPV4
+      # PMA_HOST: wordpress_mysql
+      # PMA_USER: root
+      # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
+    expose:
+      - 80
+#    depends_on:
+#      - wordpress_mysql
+    secrets:
+      - wordpress_db_root_password
+
+  adminer:
+    image: adminer:4.6.3-standalone
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adminer.entrypoints=websecure"
+      - "traefik.http.routers.adminer.rule=Host(`${DBADMIN_URL}`)"
+      - "traefik.http.routers.adminer.tls=true"
+      - "traefik.http.routers.adminer.tls.certresolver=lets-encrypt"
+      - "traefik.port=8080"
+    networks:
+      - internal
+      - proxy
+      - localnet
+    restart: unless-stopped
+    container_name: adminer
+#    depends_on:
+#      - wordpress_mysql
+#    environment:
+#      ADMINER_DEFAULT_SERVER: wordpress_mysql
+
+secrets:
+  wordpress_db_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt"
+  wordpress_db_root_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"

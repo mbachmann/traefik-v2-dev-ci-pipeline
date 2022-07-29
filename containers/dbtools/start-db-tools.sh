@@ -12,9 +12,11 @@ if [[ ! -f "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.tx
     echo -n "wordpress" > "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"
 fi
 
-if [ ! "$(docker ps -q -f name=wordpress)" ]; then
-   docker-compose up -d
+if [ ! "$(docker ps -q -f name=phpmyadmin)" ]; then
+   docker-compose -f docker-compose-db-tools.yml up -d
 fi
 
-echo "https://${BLOG_URL}"
 
+echo "https://${DBADMIN_URL}"
+
+echo "https://${DB_PHP_MYADMIN_URL}"

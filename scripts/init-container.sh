@@ -35,6 +35,10 @@ cd "${PRJ_ROOT_DIR}/containers/portainer" || exit
 cd "${PRJ_ROOT_DIR}/containers/wordpress" || exit
 ./start-wordpress.sh
 
+# ==== DB TOOLS ADMINER and PHPMYADMIN  ====
+cd "${PRJ_ROOT_DIR}/containers/dbtools" || exit
+./start-db-tools.sh
+
 # ========== SPRING BOOT TODOS  =================
 cd "${PRJ_ROOT_DIR}/containers/todo" || exit
 ./start-todo-h2.sh

@@ -54,49 +54,6 @@ services:
       - wordpress_db_root_password
       - wordpress_db_password
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`${DB_PHP_MYADMIN_URL}`)"
-      - "traefik.http.routers.phpmyadmin.tls=true"
-      - "traefik.http.routers.phpmyadmin.tls.certresolver=lets-encrypt"
-      - "traefik.port=80"
-    restart: unless-stopped
-    networks:
-      - internal
-      - proxy
-      - localnet
-    # environment:
-      # PMA_HOST: wordpress_mysql
-      # PMA_USER: root
-      # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
-    expose:
-      - 80
-    depends_on:
-      - wordpress_mysql
-    secrets:
-      - wordpress_db_root_password
-
-  adminer:
-    image: adminer:4.6.3-standalone
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.adminer.entrypoints=websecure"
-      - "traefik.http.routers.adminer.rule=Host(`${DBADMIN_URL}`)"
-      - "traefik.http.routers.adminer.tls=true"
-      - "traefik.http.routers.adminer.tls.certresolver=lets-encrypt"
-      - "traefik.port=8080"
-    networks:
-      - internal
-      - proxy
-      - localnet
-    restart: unless-stopped
-    depends_on:
-      - wordpress_mysql
-    environment:
-      ADMINER_DEFAULT_SERVER: wordpress_mysql
 
 secrets:
   wordpress_db_password:
