@@ -1,4 +1,4 @@
-echo "*** starting wordpress ***"
+echo "*** starting db-tools ***"
 
 if [ ! -d "${CONTAINER_PERSISTENT_VOLUME}/secrets" ]; then
   mkdir "${CONTAINER_PERSISTENT_VOLUME}/secrets"

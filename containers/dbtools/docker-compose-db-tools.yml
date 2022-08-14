@@ -35,11 +35,9 @@ services:
       - 80
 #    depends_on:
 #      - wordpress_mysql
-    secrets:
-      - wordpress_db_root_password
 
   adminer:
-    image: adminer:4.6.3-standalone
+    image: adminer:4.8.1-standalone
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adminer.entrypoints=websecure"
@@ -58,8 +56,4 @@ services:
 #    environment:
 #      ADMINER_DEFAULT_SERVER: wordpress_mysql
 
-secrets:
-  wordpress_db_password:
-    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_password.txt"
-  wordpress_db_root_password:
-    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/wordpress_db_root_password.txt"
+

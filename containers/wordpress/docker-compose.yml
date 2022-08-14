@@ -43,7 +43,7 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD_FILE: /run/secrets/wordpress_db_password
-      MYSQL_ROOT_HOST: %
+      MYSQL_ROOT_HOST: '%'
     restart: unless-stopped
     networks:
       - internal
