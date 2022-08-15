@@ -32,7 +32,7 @@ The setup of the server is done by using the hetzner hcloud-cli and cloud-init.
 - A _DNS token_ to automatically synchronize DNS records with the [Hetzner DNS Api](https://dns.hetzner.com/).
 - A **fork** of this repository.
 **Go to GitHub and create a fork**. Any change of this repository requires a _commit and push_ before creating a server. This
-repository is cloned in the new created server and will be used to boot the container infrastructure.
+repository is cloned into your new created server and will be used to boot the container infrastructure. It means you need _**git push**_ rights.
 
 
 ### Create a hcloud-token.local file
@@ -117,7 +117,8 @@ export HCLOUD_USER_NAME="mbach"
 3. Arbitrary server name
 
 ```shell
-export SERVER_NAME="s001"
+export SERVER_NUMBER="11"
+export SERVER_NAME="s${SERVER_NUMBER}"
 ```
 
 4. Server type as in https://www.hetzner.com/cloud
@@ -131,9 +132,12 @@ export SERVER_NAME="s001"
 | 11  | ccx11 | 2    | dedicated | 8.0 GB  | 80 GB  | local    |
 | 12  | ccx21 | 2    | dedicated | 16.0 GB | 160 GB | local    |
 | .   | ...  | .     | ..        | ..      | ..     | ..       |
+
 ```shell
 export SERVER_TYPE="cx11"
 ```
+
+For services like webmin, lokal databases and several containers use _cx21_.
 
 5. Server image as in https://console.hetzner.cloud/projects/1414551/servers/create 
 
@@ -144,6 +148,8 @@ available like ruby, go, gitlab, docker-ce, lamp, nextcloud.
 ```shell
 export SERVER_IMAGE="ubuntu-20.04"
 ```
+
+Currently, only the image _ubuntu-20.04_ has been tested.
 
 6. Server Location 
 
@@ -187,8 +193,8 @@ In this example, the server name is part of the url.
 export SUB_DOMAIN=".${SERVER_NAME}"
 ```
 
-- Example with subdomain: monitor.s001.sintares.com
-- Example without subdomain: monitor.sintares.com
+- Example with subdomain: traefik.s11.sintares.com
+- Example without subdomain: traefik.sintares.com
 
 If no subdomain is required, then SUB_DOMAIN=""
 
@@ -199,29 +205,29 @@ export BASE_URL="${SUB_DOMAIN}.${DOMAIN_URL}"
 
 2. Service Name and URL for each service
 
-- monitor.s001.sintares.com: Traefik Reverse Proxy
-- portainer.s001.sintares.com: Container management
+- traefik.s11.sintares.com: Traefik Reverse Proxy
+- portainer.s11.sintares.com: Container management
 
 ```shell
 # Service Names
-export MONITOR_SVC="monitor${SUB_DOMAIN}"
+export TRAEFIK_SVC="traefik${SUB_DOMAIN}"
 export PORTAINER_SVC="portainer${SUB_DOMAIN}"
-export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
+# export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
 
 export BLOG_SVC="blog${SUB_DOMAIN}"
-export DBADMIN_SVC="db-admin${SUB_DOMAIN}"
+export ADMINER_SVC="adminer${SUB_DOMAIN}"
 export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
 export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
 ```
 
 ```shell
 # URL's for installed applications
-export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
+export TRAEFIK_URL="${TRAEFIK_SVC}.${DOMAIN_URL}"
 export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
 export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
 
 export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
-export DBADMIN_URL="${DBADMIN_SVC}.${DOMAIN_URL}"
+export ADMINER_URL="${ADMINER_SVC}.${DOMAIN_URL}"
 export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
 export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
 ```
@@ -294,7 +300,7 @@ cat /var/log/cloud-init.log | grep init-container
 
 Open the browser an enter: 
 
-- https://monitor.s001.YOURDOMAIN
+- https://traefik.s11.YOURDOMAIN
 
 Login with admin and the password you have chosen for the traefik login.
 

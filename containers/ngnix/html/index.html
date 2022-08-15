@@ -21,10 +21,10 @@
         </thead>
 
         export SITE_URL="${SITE_SVC}.${DOMAIN_URL}"
-        export MONITOR_URL="${MONITOR_SVC}.${DOMAIN_URL}"
+        export TRAEFIK_URL="${TRAEFIK_SVC}.${DOMAIN_URL}"
         export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
-        export DBADMIN_URL="${DBADMIN_SVC}.${DOMAIN_URL}"
-        export DB_PHP_MYADMIN_URL="${DB_PHP_MYADMIN_SVC}.${DOMAIN_URL}"
+        export ADMINER_URL="${ADMINER_SVC}.${DOMAIN_URL}"
+        export PHP_MYADMIN_URL="${PHP_MYADMIN_SVC}.${DOMAIN_URL}"
         export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
         export TODO_ANGULAR_URL="${TODO_ANGULAR_SVC}.${DOMAIN_URL}"
         export DEMO_INITIAL_URL="${DEMO_INITIAL_SVC}.${DOMAIN_URL}"
@@ -36,13 +36,13 @@
         export NEXUS_URL="${NEXUS_SVC}.${DOMAIN_URL}"
         export NEXUS_REGISTRY_URL="${NEXUS_REGISTRY_SVC}.${DOMAIN_URL}"
         export KEYCLOAK_URL="${KEYCLOAK_SVC}.${DOMAIN_URL}"
-        export KEYCLOAK_DBADMIN_URL="${KEYCLOAK_DBADMIN_SVC}.${DOMAIN_URL}"
+        export KEYCLOAK_ADMINER_URL="${KEYCLOAK_ADMINER_SVC}.${DOMAIN_URL}"
 
         <tbody>
         <tr>
             <th scope="row">1</th>
             <td>Traefik</td>
-            <td><a href="https://MONITOR_URL">MONITOR_URL</a></td>
+            <td><a href="https://TRAEFIK_URL">TRAEFIK_URL</a></td>
             <td>Reverse Proxy</td>
             <td><a href="https://traefik.io/traefik/">traefik.io</a></td>
         </tr>
@@ -78,7 +78,7 @@
         <tr>
             <th scope="row">5</th>
             <td>Keycloak MySQL</td>
-            <td><a href="https://KEYCLOAK_DBADMIN_URL">KEYCLOAK_DBADMIN_URL</a></td>
+            <td><a href="https://KEYCLOAK_ADMINER_URL">KEYCLOAK_ADMINER_URL</a></td>
             <td>MySQL Database for the Identity Manager</td>
             <td><a href="https://www.mysql.com/">mysql.com</a></td>
         </tr>

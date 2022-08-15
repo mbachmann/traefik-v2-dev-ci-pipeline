@@ -25,6 +25,6 @@ if [ ! "$(docker ps -q -f name=keycloak)" ]; then
    docker-compose up -d
 fi
 
-echo "https://${KEYCLOAK_DBADMIN_URL}"
+echo "https://${KEYCLOAK_ADMINER_URL}"
 
 echo "https://${KEYCLOAK_URL}"

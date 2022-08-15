@@ -22,7 +22,7 @@
         certResolver = "lets-encrypt"
 
     [http.routers.api]
-      rule = "Host(`MONITOR_URL`)"
+      rule = "Host(`TRAEFIK_URL`)"
       entrypoints = ["websecure"]
       middlewares = ["simpleAuth"]
       service = "api@internal"

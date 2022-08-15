@@ -59,10 +59,10 @@ services:
       - keycloak_db_password
 
   keycloak-adminer:
-    image: adminer:4.6.3-standalone
+    image: adminer:4.8.1-standalone
     container_name: keycloak-adminer
     labels:
-      - "traefik.http.routers.keycloak-adminer.rule=Host(`${KEYCLOAK_DBADMIN_URL}`)"
+      - "traefik.http.routers.keycloak-adminer.rule=Host(`${KEYCLOAK_ADMINER_URL}`)"
       - "traefik.http.routers.keycloak-adminer.tls=true"
       - "traefik.http.routers.keycloak-adminer.tls.certresolver=lets-encrypt"
       - "traefik.port=8080"

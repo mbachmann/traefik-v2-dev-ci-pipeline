@@ -17,6 +17,6 @@ if [ ! "$(docker ps -q -f name=phpmyadmin)" ]; then
 fi
 
 
-echo "https://${DBADMIN_URL}"
+echo "https://${ADMINER_URL}"
 
-echo "https://${DB_PHP_MYADMIN_URL}"
+echo "https://${PHP_MYADMIN_URL}"
