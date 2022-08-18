@@ -17,11 +17,11 @@ users:
 
 # Defer writing the file
 write_files:
-  - path: /var/lib/cloud/scripts/per-boot/init-container.sh
+  - path: /var/lib/cloud/scripts/per-boot/init-server.sh
     content: |
       #!/bin/sh
       echo init
-      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
+      FILE=/home/ubuntu/traefik-v2-dev-ci-pipeline/server/init-server.sh
       if [ -f "$FILE" ]; then
           echo "$FILE exists."
           $FILE

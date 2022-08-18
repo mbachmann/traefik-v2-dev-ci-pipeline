@@ -22,7 +22,7 @@ export SERVER_LOCATION="hel1"
 export UBUNTU_USER=ubuntu
 export UBUNTU_HOME="/home/${UBUNTU_USER}"
 
-# ============= network ==============
+# ==================================== NETWORK ========================================
 export HCLOUD_NETWORK_NAME="${HCLOUD_PROJECT_NAME}-network"
 # each server needs an unique ip address
 export PRIVATE_IPV4=10.0.0."${SERVER_NUMBER}"
@@ -79,7 +79,7 @@ export TRAEFIK_SVC="traefik${SUB_DOMAIN}"
 export BLOG_SVC="blog${SUB_DOMAIN}"
 export URBACKUP_SVC="urbackup${SUB_DOMAIN}"
 export ADMINER_SVC="adminer${SUB_DOMAIN}"
-export PHP_MYADMIN_SVC="pypmyadmin${SUB_DOMAIN}"
+export PHP_MYADMIN_SVC="phpmyadmin${SUB_DOMAIN}"
 export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
 export TODO_ANGULAR_SVC="todo-angular${SUB_DOMAIN}"
 export DEMO_INITIAL_SVC="demo-initial${SUB_DOMAIN}"

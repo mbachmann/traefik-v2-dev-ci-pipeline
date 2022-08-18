@@ -75,7 +75,7 @@ export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 
 ### Adjust the hcloud/cloud-init.yml file
 
-The file _hcloud/cloud-init.yml_ is used to set up _Ubuntu_. 
+The file _hcloud/cloud-init.yml_ is used to set up _Ubuntu_. The file cloud-init.yml controls how the server will get created. Following adjustments are important:
 
 1. Delete the entries in ```ssh_authorized_keys:```.
 
@@ -97,6 +97,26 @@ public key from the file _local/id_rsa.pub_ to cloud-init.yml. If the key does n
 ```
 
 Replace the url _https://github.com/mbachmann/traefik-v2-dev-ci-pipeline_ with your own url.
+
+3. Check the installed the packages
+
+Depending on the requirements you can choose if webmin or postgres shall be installed. Just delete the lines in  _hcloud/cloud-init.yml_ packages section.
+
+- webmin
+- postgresql
+- postgresql-contrib
+
+
+
+4. Check the runcmd part
+
+If you do not want installing the mysql server on localhost the commands can be deleted:
+
+- echo "mysql-server mysql-server/root_password password pwd" | sudo debconf-set-selections
+- echo "mysql-server mysql-server/root_password_again password pwd" | sudo debconf-set-selections
+- sudo apt-get -y install mysql-server
+
+
 
 ### Adjust the scripts/environment.sh file for the server parameters
 
@@ -259,10 +279,14 @@ Another option to create the file is with htpasswd (if available):
 htpasswd -nb admin password
 ```
 
-## Adjust the init-container.sh file
+## Adjust the init-server.sh file
 
-The file init-container.sh is controlling which containers are going to get automatically started.
+The file init-server.sh is configuring the server after boot. It configures webmin and the local databases. 
+at the end it calls the script file init-containers.sh.
 
+## Adjust the init-containers.sh file
+
+The file init-containers.sh is controlling which containers are going to get automatically started.
 
 
 ## Create a server
