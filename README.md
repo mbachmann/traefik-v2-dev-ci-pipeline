@@ -282,7 +282,7 @@ htpasswd -nb admin password
 ## Adjust the init-server.sh file
 
 The file init-server.sh is configuring the server after boot. It configures webmin and the local databases. 
-at the end it calls the script file init-containers.sh.
+at the end it calls the script file _init-containers.sh_.
 
 ## Adjust the init-containers.sh file
 
@@ -319,7 +319,7 @@ is automatically rebooting. The login to the server is terminted. You need to lo
 docker ps -a
 docker logs traefik
 sudo cat /var/log/syslog | grep portainer
-cat /var/log/cloud-init.log | grep init-container
+cat /var/log/cloud-init.log | grep init-containers
 ```
 
 Open the browser an enter: 
