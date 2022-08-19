@@ -191,8 +191,8 @@ runcmd:
   - git config --global credential.helper cache
   - git clone https://github.com/mbachmann/traefik-v2-dev-ci-pipeline /home/ubuntu/traefik-v2-dev-ci-pipeline
   - chown -R ubuntu:ubuntu /home/ubuntu/traefik-v2-dev-ci-pipeline
-  # Prepare script init-container.sh and environment.sh
-  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/init-container.sh
+  # Prepare script init-server.sh and environment.sh
+  - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/server/init-server.sh
   - chmod +x /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh
   - echo 'source /home/ubuntu/traefik-v2-dev-ci-pipeline/scripts/environment.sh' > /home/ubuntu/.bash_profile
   - chmod u+rwx /home/ubuntu/.bash_profile
