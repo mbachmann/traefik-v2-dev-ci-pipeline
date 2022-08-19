@@ -17,7 +17,7 @@ The setup of the server is done by using the hetzner hcloud-cli and cloud-init.
 * [Adjust the scripts/environment.sh file for the server parameters](#adjust-the-scriptsenvironmentsh-file-for-the-server-parameters)
 * [Adjust the scripts/environment.sh file for the containers](#adjust-the-scriptsenvironmentsh-file-for-the-containers)
 * [Create a password for traefik login](#create-a-password-for-traefik-login)
-* [Adjust the init-container.sh file](#adjust-the-init-containersh-file)
+* [Adjust the init-containers.sh file](#adjust-the-init-containerssh-file)
 * [Create a server](#create-a-server)
 * [Login to the server](#login-to-the-server)
 * [Delete the server](#delete-the-server)
