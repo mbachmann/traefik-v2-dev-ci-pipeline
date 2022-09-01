@@ -5,6 +5,9 @@ networks:
     external: true
   internal:
     external: false
+  localnet:
+    external: true
+
 
 services:
   keycloak:
@@ -16,28 +19,39 @@ services:
       DB_ADDR: keycloak-mysql
       DB_USER: keycloak
       DB_PASSWORD_FILE: /run/secrets/keycloak_db_password
-      DB_PORT: "3306"
+      DB_PORT: 3307
       DB_DATABASE: keycloak
-    volumes:
-      - ./import:/tmp/import
-    command:
-      - "-Dkeycloak.migration.action=import"
-      - "-Dkeycloak.migration.provider=dir"
-      - "-Dkeycloak.migration.dir=/tmp/import"
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_HOSTNAME: ${KEYCLOAK_URL}
+#    volumes:
+#      - ./import:/tmp/import
+#    command:
+      #- "-Dkeycloak.migration.action=import"
+      #- "-Dkeycloak.migration.provider=dir"
+      #- "-Dkeycloak.migration.dir=/tmp/import"
+#      - ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled"]
     networks:
       - internal
+#      - localnet
       - proxy
+#    ports:
+#      - 8080:8080
     secrets:
       - keycloak_user
       - keycloak_password
       - keycloak_db_password
-    depends_on:
-      - keycloak-mysql
+    container_name: keycloak
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
       - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_URL}`)"
       - "traefik.http.routers.keycloak.tls=true"
       - "traefik.http.routers.keycloak.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.routers.keycloak.service=keycloak"
       - "traefik.port=8080"
+    depends_on:
+      - keycloak-mysql
 
   keycloak-mysql:
     image: mysql:8.0.22
@@ -45,11 +59,18 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/keycloak_db_root_password
-      MYSQL_DATABASE: wordpress
+      MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD_FILE: /run/secrets/keycloak_db_password
+      MYSQL_TCP_PORT: 3307
+      MYSQL_ROOT_HOST: '%'
     networks:
       - internal
+      - localnet
+
+    expose:
+      - 3307
+
     labels:
       - traefik.enable=false
     volumes:
@@ -57,23 +78,6 @@ services:
     secrets:
       - keycloak_db_root_password
       - keycloak_db_password
-
-  keycloak-adminer:
-    image: adminer:4.8.1-standalone
-    container_name: keycloak-adminer
-    labels:
-      - "traefik.http.routers.keycloak-adminer.rule=Host(`${KEYCLOAK_ADMINER_URL}`)"
-      - "traefik.http.routers.keycloak-adminer.tls=true"
-      - "traefik.http.routers.keycloak-adminer.tls.certresolver=lets-encrypt"
-      - "traefik.port=8080"
-    networks:
-      - internal
-      - proxy
-    restart: unless-stopped
-    depends_on:
-      - keycloak-mysql
-    environment:
-      ADMINER_DEFAULT_SERVER: keycloak-mysql
 
 secrets:
   keycloak_db_password:

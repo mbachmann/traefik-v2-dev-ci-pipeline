@@ -31,6 +31,7 @@ if [[ ! -f "$isPostgresInit" ]]; then
     echo "postgres: set firewall rules for postgres"
     sudo ufw allow from 172.16.0.0/12 to any port 5432
     sudo ufw allow from 10.0.0.0/24 to any port 5432
+    sudo ufw allow from 192.168.0.0/16 to any port 5432
     unset postgres_root_password
     touch "${isPostgresInit}"
 fi

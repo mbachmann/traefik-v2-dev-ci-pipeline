@@ -24,6 +24,7 @@ if [[ ! -f "$isMysqlInit" ]]; then
     echo "set firewall rules for mysql"
     sudo ufw allow from 172.16.0.0/12 to any port 3306
     sudo ufw allow from 10.0.0.0/24 to any port 3306
+    sudo ufw allow from 192.168.0.0/16 to any port 3306
     sudo systemctl restart mysql
     unset mysql_root_password
     touch "${isMysqlInit}"

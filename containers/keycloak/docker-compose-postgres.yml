@@ -1,0 +1,51 @@
+version: '3.7'
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
+  localnet:
+    external: true
+
+services:
+  postgres:
+    image: postgres:13.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    networks:
+      - internal
+      - localnet
+    container_name: keycloak_postgres
+  keycloak:
+    depends_on:
+      - postgres
+    container_name: keycloak
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: ${POSTGRESQL_DB}
+      DB_USER: ${POSTGRESQL_USER}
+      DB_PASSWORD: ${POSTGRESQL_PASS}
+    image: jboss/keycloak:${KEYCLOAK_VERSION}
+#    ports:
+#      - "28080:8080"
+    restart: unless-stopped
+    networks:
+      - internal
+      - localnet
+      - proxy
+
+secrets:
+  keycloak_db_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_db_password.txt"
+  keycloak_db_root_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_db_root_password.txt"
+
+  keycloak_user:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_user.txt"
+  keycloak_password:
+    file: "${CONTAINER_PERSISTENT_VOLUME}/secrets/keycloak_password.txt"

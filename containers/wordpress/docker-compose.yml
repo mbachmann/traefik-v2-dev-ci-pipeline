@@ -12,7 +12,9 @@ services:
   blog:
     image: wordpress:4.9.8-apache
     environment:
-      WORDPRESS_DB_HOST: wordpress_mysql
+      WORDPRESS_DB_HOST: wordpress-mysql
+      # WORDPRESS_DB_HOST: docker-host
+      # WORDPRESS_DB_HOST: $PRIVATE_IPV4
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: wordpress
@@ -25,6 +27,7 @@ services:
       - "traefik.port=80"
     networks:
       - internal
+      - localnet
       - proxy
     depends_on:
       - wordpress_mysql
@@ -35,9 +38,10 @@ services:
     restart: unless-stopped
     secrets:
       - wordpress_db_password
-  wordpress_mysql:
+
+  wordpress-mysql:
     image: mysql:5.7
-    container_name: wordpress_mysql
+    container_name: wordpress-mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/wordpress_db_root_password
       MYSQL_DATABASE: wordpress

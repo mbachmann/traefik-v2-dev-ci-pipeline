@@ -26,8 +26,9 @@ services:
       - proxy
       - localnet
     environment:
-      PMA_ARBITRARY: 1
-      # PMA_HOSTS: wordpress_mysql, docker_host, $PRIVATE_IPV4
+      PMA_ARBITRARY: 0
+      PMA_HOSTS: wordpress-mysql, docker-host, $PRIVATE_IPV4, keycloak-mysql
+      PMA_PORTS: 3306,3306,3306,3307
       # PMA_HOST: wordpress_mysql
       # PMA_USER: root
       # PMA_PASSWORD: /run/secrets/wordpress_db_root_password
