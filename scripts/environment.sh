@@ -16,8 +16,8 @@ export SERVER_TYPE="cx21"
 # Server image as in https://console.hetzner.cloud/projects/1414551/servers/create
 # List images: hcloud image list
 export SERVER_IMAGE="ubuntu-20.04"
-# List locations: hcloud location list
-export SERVER_LOCATION="hel1"
+# List locations: hcloud location list      - hel1, fsn1, nbg1, ash
+export SERVER_LOCATION="nbg1"
 # Ubuntu user and home directory, **do not change this name**
 export UBUNTU_USER=ubuntu
 export UBUNTU_HOME="/home/${UBUNTU_USER}"
