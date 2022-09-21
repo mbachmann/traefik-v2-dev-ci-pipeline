@@ -30,7 +30,7 @@ services:
       - localnet
       - proxy
     depends_on:
-      - wordpress_mysql
+      - wordpress-mysql
     volumes:
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/docker/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini"
       - "${CONTAINER_PERSISTENT_VOLUME}/wordpress/data:/var/www/html" # Full wordpress project  -
