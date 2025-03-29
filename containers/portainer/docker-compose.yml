@@ -1,4 +1,4 @@
-version: "3.7"
+
 
 networks:
   proxy:
@@ -8,13 +8,14 @@ networks:
 
 services:
 
-  portainer:
-    image: portainer/portainer-ce:2.9.3
+  portainer-ce:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
     command: -H unix:///var/run/docker.sock
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - "${CONTAINER_PERSISTENT_VOLUME}/portainer_data:/data"
+      - portainer_data:/data
 #    ports:
 #      - 8000:8000
 #      - 9000:9000
@@ -28,16 +29,20 @@ services:
       # Frontend
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_URL}`)"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.united-portal.com`)"
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer.service=portainer"
       - "traefik.http.routers.portainer.tls.certresolver=lets-encrypt"
 
       # Edge
-#      - "traefik.http.routers.edge.rule=Host(`${PORTAINER_EDGE_URL}`)"
-#      - "traefik.http.routers.edge.entrypoints=websecure"
-#      - "traefik.http.services.edge.loadbalancer.server.port=8000"
-#      - "traefik.http.routers.edge.service=edge"
-#      - "traefik.http.routers.edge.tls.certresolver=lets-encrypt"
-    container_name: portainer
+      - "traefik.http.routers.edge.rule=Host(`edge.united-portal.com`)"
+      - "traefik.http.routers.edge.entrypoints=websecure"
+      - "traefik.http.services.edge.loadbalancer.server.port=8000"
+      - "traefik.http.routers.edge.service=edge"
+      - "traefik.http.routers.edge.tls.certresolver=lets-encrypt"
+
+volumes:
+  portainer_data:
+    name: portainer_data
+    external: false

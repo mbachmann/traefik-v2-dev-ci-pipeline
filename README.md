@@ -1,4 +1,4 @@
-# Setup for Simple Container Infrastructure
+# Setup for Simple Container Infrastructure using bash
 
 [https://github.com/mbachmann/traefik-v2-dev-ci-pipeline](https://github.com/mbachmann/traefik-v2-dev-ci-pipeline)
 
@@ -26,11 +26,13 @@ The setup of the server is done by using the hetzner hcloud-cli and cloud-init.
 ## Prerequisite
 
 - bash console (windows cmd-line or PowerShell is not working). On Windows install [git bash](https://git-scm.com/downloads).
+- On the MAC **do not use zsh, use bash**. check current shell `echo "$SHELL"`,  list shells: `cat /etc/shells`, change to bash shell `chsh -s /bin/bash`, change back to zsh: `chsh -s /bin/zsh`.
 - hcloud-cli from Hetzner [hcloud](hcloud/README.md).
 - A created project at the [Hetzner Cloud](https://console.hetzner.cloud/projects).
 - A _HCloud token_ from the Hetzner Cloud [Hetzner Cloud](https://console.hetzner.cloud/projects).
 - A _DNS token_ to automatically synchronize DNS records with the [Hetzner DNS Api](https://dns.hetzner.com/).
 - A **fork** of this repository.
+- 
 **Go to GitHub and create a fork**. Any change of this repository requires a _commit and push_ before creating a server. This
 repository is cloned into your new created server and will be used to boot the container infrastructure. It means you need _**git push**_ rights.
 
@@ -69,7 +71,7 @@ Adjust the environment variables in the file _scripts/environment.sh_.
 ```shell
 export USE_HETZNER_DNS_API="true"
 export DOMAIN_URL="sintares.com"
-# recover zone id with getzones, defined in dns.sh
+# recover zone id with getzones, defined in dns.sh or copy it from the url (... see the print screen above)
 export ZONE_ID="aUypFiQLNDVPCUA3GJ8MLJ"
 ```
 
@@ -230,26 +232,48 @@ export BASE_URL="${SUB_DOMAIN}.${DOMAIN_URL}"
 
 ```shell
 # Service Names
+export SITE_SVC="${SERVER_NAME}"
 export TRAEFIK_SVC="traefik${SUB_DOMAIN}"
-export PORTAINER_SVC="portainer${SUB_DOMAIN}"
-# export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
-
-export BLOG_SVC="blog${SUB_DOMAIN}"
+export WORDPRESS_SVC="wordpress${SUB_DOMAIN}"
+export URBACKUP_SVC="urbackup${SUB_DOMAIN}"
 export ADMINER_SVC="adminer${SUB_DOMAIN}"
+export PHP_MYADMIN_SVC="phpmyadmin${SUB_DOMAIN}"
 export TODO_H2_SVC="todo-h2${SUB_DOMAIN}"
+export TODO_ANGULAR_SVC="todo-angular${SUB_DOMAIN}"
+export DEMO_INITIAL_SVC="demo-initial${SUB_DOMAIN}"
 export TODO_MYSQL_SVC="todo-mysql${SUB_DOMAIN}"
+export PORTAINER_SVC="portainer${SUB_DOMAIN}"
+export PORTAINER_EDGE_SVC="edge${SUB_DOMAIN}"
+export WEBMIN_SVC="webmin${SUB_DOMAIN}"
+export JENKINS_SVC="jenkins${SUB_DOMAIN}"
+export NEXUS_SVC="nexus${SUB_DOMAIN}"
+export NEXUS_REGISTRY_SVC="registry${SUB_DOMAIN}"
+export KEYCLOAK_ADMINER_SVC="keycloak-db${SUB_DOMAIN}"
+export KEYCLOAK_SVC="keycloak${SUB_DOMAIN}"
+export KEYCLOAK_ADMINER_SVC="keycloak-db${SUB_DOMAIN}"
+
 ```
 
 ```shell
 # URL's for installed applications
+export SITE_URL="${SITE_SVC}.${DOMAIN_URL}"
 export TRAEFIK_URL="${TRAEFIK_SVC}.${DOMAIN_URL}"
+export WORDPRESS_URL="${WORDPRESS_SVC}.${DOMAIN_URL}"
+export URBACKUP_URL="${URBACKUP_SVC}.${DOMAIN_URL}"
+export ADMINER_URL="${ADMINER_SVC}.${DOMAIN_URL}"
+export PHP_MYADMIN_URL="${PHP_MYADMIN_SVC}.${DOMAIN_URL}"
+export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
+export TODO_ANGULAR_URL="${TODO_ANGULAR_SVC}.${DOMAIN_URL}"
+export DEMO_INITIAL_URL="${DEMO_INITIAL_SVC}.${DOMAIN_URL}"
+export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
 export PORTAINER_URL="${PORTAINER_SVC}.${DOMAIN_URL}"
 export PORTAINER_EDGE_URL="${PORTAINER_EDGE_SVC}.${DOMAIN_URL}"
-
-export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
-export ADMINER_URL="${ADMINER_SVC}.${DOMAIN_URL}"
-export TODO_H2_URL="${TODO_H2_SVC}.${DOMAIN_URL}"
-export TODO_MYSQL_URL="${TODO_MYSQL_SVC}.${DOMAIN_URL}"
+export WEBMIN_URL="${WEBMIN_SVC}.${DOMAIN_URL}"
+export JENKINS_URL="${JENKINS_SVC}.${DOMAIN_URL}"
+export NEXUS_URL="${NEXUS_SVC}.${DOMAIN_URL}"
+export NEXUS_REGISTRY_URL="${NEXUS_REGISTRY_SVC}.${DOMAIN_URL}"
+export KEYCLOAK_URL="${KEYCLOAK_SVC}.${DOMAIN_URL}"
+export KEYCLOAK_ADMINER_URL="${KEYCLOAK_ADMINER_SVC}.${DOMAIN_URL}"
 ```
 
 ## Create a password for traefik login
@@ -287,6 +311,14 @@ at the end it calls the script file _init-containers.sh_.
 ## Adjust the init-containers.sh file
 
 The file init-containers.sh is controlling which containers are going to get automatically started.
+
+## Create the secrets files
+
+The secrets must be created in the folder _local/secrets_. The folder _local/secrets/default_ contains all files with
+default secrets. Copy all the files from the default folder _local/secrets/default_ to the secrets folder _local/secrets_ and
+change the secrets. The secrets are not pushed to the git repository (controlled through _.gitignore_)
+
+![secrets](readme/secrets.png)
 
 
 ## Create a server
@@ -342,5 +374,4 @@ login
 deleteServer
 ```
 
-## Create a Password for Webmin login
 

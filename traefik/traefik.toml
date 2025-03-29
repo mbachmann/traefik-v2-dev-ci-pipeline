@@ -8,6 +8,8 @@
     [entryPoints.web.http.redirections.entryPoint]
       to = "websecure"
       scheme = "https"
+    [entryPoints.web.forwardedHeaders]
+      insecure = true
 
   [entryPoints.websecure]
     address = ":443"

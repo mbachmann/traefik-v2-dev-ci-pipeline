@@ -22,8 +22,11 @@ getMyIp
 # move tokens if exist from /home/ubuntu/local /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 mv  -v /home/ubuntu/local/* /home/ubuntu/"${GIT_PROJECT_NAME}"/local
 
+webmin_root_password_filename="${CONTAINER_PERSISTENT_VOLUME}/secrets/webmin_root_password.txt"
+webmin_root_password=$(readFromFile ${webmin_root_password_filename} ubuntu)
+
 # Adjust the root password for webmin login
-sudo sh -c 'echo root:ubuntu | chpasswd'
+sudo sh -c "echo root:${webmin_root_password} | chpasswd"
 
 echo "configure server"
 # =============   Execute Scripts    =======================

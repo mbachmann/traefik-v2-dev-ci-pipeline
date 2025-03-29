@@ -3,6 +3,14 @@
 echo "configure-localhost-postgres-database"
 source "${PRJ_ROOT_DIR}/server/postgres-functions.sh"
 
+# ============== Check if postgres on localhost is required ===============
+
+if [ "${RUN_POSTGRES}" = "false" ]; then
+      echo "Stop postgres service, because the variable RUN_POSTGRES is false"
+      sudo service postgresql stop
+      return 1
+fi
+
 databasedir="${CONTAINER_PERSISTENT_VOLUME}/database"
 echo "databasedir = ${databasedir}"
 isPostgresInit="${PRJ_ROOT_DIR}"/local/database-records/postgresinit
@@ -15,7 +23,12 @@ postgresversion=$(locate bin/postgres | tr -dc '0-9') ; echo "postgres version i
 if [[ ! -f "$isPostgresInit" ]]; then
     echo "$isPostgresInit  not exists."
 
-    postgres_root_password=postgres
+    postgres_root_password_filename="${CONTAINER_PERSISTENT_VOLUME}/secrets/postgres_root_password.txt"
+    postgres_root_password=$(readFromFile ${postgres_root_password_filename} postgres)
+
+    postgres_ubuntu_password_filename="${CONTAINER_PERSISTENT_VOLUME}/secrets/postgres_ubuntu_password.txt"
+    postgres_ubuntu_password=$(readFromFile ${postgres_ubuntu_password_filename} ubuntu)
+
     echo "postgres: set psql binding to 0.0.0.0 and set root password"
     echo "postgres: check with: netstat -nlt"
     setPsqlPassword "${postgres_root_password}"
@@ -27,7 +40,7 @@ if [[ ! -f "$isPostgresInit" ]]; then
     sudo service postgresql restart
     sudo systemctl status postgresql
     echo "postgres: create ubuntu user and ubuntu database"
-    createPsqlUserAndDatabase "${postgres_root_password}" ubuntu ubuntu ubuntu
+    createPsqlUserAndDatabase "${postgres_root_password}" ubuntu "${postgres_ubuntu_password}" ubuntu
     echo "postgres: set firewall rules for postgres"
     sudo ufw allow from 172.16.0.0/12 to any port 5432
     sudo ufw allow from 10.0.0.0/24 to any port 5432

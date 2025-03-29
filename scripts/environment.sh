@@ -3,15 +3,15 @@
 # All details in https://developers.hetzner.com/cloud/
 
 # Project name as defined in https://console.hetzner.cloud/projects
-# Lists know contexts on the local machine: hcloud context list
+# Lists know contexts on the local machine: hcloud context list.
 export HCLOUD_PROJECT_NAME="cas-oop"
 # Arbitrary user name
 export HCLOUD_USER_NAME="mbach"
-# Arbitrary server name
+# Arbitrary server name. Use a server number between 10 and 250.
 export SERVER_NUMBER="11"
 export SERVER_NAME="s${SERVER_NUMBER}"
 # Server type as in https://www.hetzner.com/cloud
-# List server types: hcloud server-type list cx11 2GB Ram, cx21 4GB Ram
+# List server types: hcloud server-type list cx11 2GB Ram, cx21 4GB Ram.
 export SERVER_TYPE="cx21"
 # Server image as in https://console.hetzner.cloud/projects/1414551/servers/create
 # List images: hcloud image list
@@ -35,7 +35,7 @@ export GIT_ORIG_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 export GIT_REPO=https://github.com/mbachmann/traefik-v2-dev-ci-pipeline
 
 # ================================ LOCAL Folder ========================================
-# Copy Hcloud and DNS Token to Remote
+# Copy Hcloud and DNS Token to Remote (true or false)
 export COPY_TOKEN=true
 # Copy SSH Key Pair to remote
 export COPY_SSH_KEYPAIR=true
@@ -57,6 +57,14 @@ export VOLUME_SIZE="10"
 # Arbitary ssh key name
 export SSH_KEY_NAME="${HCLOUD_USER_NAME}"@s001
 
+
+# ============================= localhost DATABASES  ================================
+# Run databases directly on the server - not in container (true or false)
+
+export RUN_MY_SQL=true
+export RUN_POSTGRES=true
+export RUN_ORACLE=true
+
 # ===================================== DNS =========================================
 # lets encrypt allows only 5 registrations with same url within 7 days
 # If the DNS is managed by Hetzner you can use the automatic DNS reccord adding https://dns.hetzner.com/
@@ -76,7 +84,7 @@ export BASE_URL="${SERVER_NAME}.${DOMAIN_URL}"
 # Service Names
 export SITE_SVC="${SERVER_NAME}"
 export TRAEFIK_SVC="traefik${SUB_DOMAIN}"
-export BLOG_SVC="blog${SUB_DOMAIN}"
+export WORDPRESS_SVC="wordpress${SUB_DOMAIN}"
 export URBACKUP_SVC="urbackup${SUB_DOMAIN}"
 export ADMINER_SVC="adminer${SUB_DOMAIN}"
 export PHP_MYADMIN_SVC="phpmyadmin${SUB_DOMAIN}"
@@ -97,7 +105,7 @@ export KEYCLOAK_ADMINER_SVC="keycloak-db${SUB_DOMAIN}"
 # URL's for installed applications
 export SITE_URL="${SITE_SVC}.${DOMAIN_URL}"
 export TRAEFIK_URL="${TRAEFIK_SVC}.${DOMAIN_URL}"
-export BLOG_URL="${BLOG_SVC}.${DOMAIN_URL}"
+export WORDPRESS_URL="${WORDPRESS_SVC}.${DOMAIN_URL}"
 export URBACKUP_URL="${URBACKUP_SVC}.${DOMAIN_URL}"
 export ADMINER_URL="${ADMINER_SVC}.${DOMAIN_URL}"
 export PHP_MYADMIN_URL="${PHP_MYADMIN_SVC}.${DOMAIN_URL}"
@@ -121,7 +129,7 @@ function createAllDNSRecords() {
   addDnsRecord "${TRAEFIK_SVC}"
   addDnsRecord "${PORTAINER_SVC}"
   addDnsRecord "${PORTAINER_EDGE_SVC}"
-  addDnsRecord "${BLOG_SVC}"
+  addDnsRecord "${WORDPRESS_SVC}"
   addDnsRecord "${URBACKUP_SVC}"
   addDnsRecord "${ADMINER_SVC}"
   addDnsRecord "${PHP_MYADMIN_SVC}"
@@ -143,7 +151,7 @@ function deleteAllDNSRecords() {
   deleteDnsRecord "${TRAEFIK_SVC}"
   deleteDnsRecord "${PORTAINER_SVC}"
   deleteDnsRecord "${PORTAINER_EDGE_SVC}"
-  deleteDnsRecord "${BLOG_SVC}"
+  deleteDnsRecord "${WORDPRESS_SVC}"
   deleteDnsRecord "${URBACKUP_SVC}"
   deleteDnsRecord "${ADMINER_SVC}"
   deleteDnsRecord "${PHP_MYADMIN_SVC}"
@@ -226,4 +234,19 @@ function loginToPsql() {
 
 function loginToMysql() {
    mysql -u root -p'ubuntu'
+}
+
+function readFromFile() {
+
+  filename="$1"
+  defaultvalue="$2"
+
+  if ! test -f "${filename}" ; then
+    file_content="${defaultvalue}"
+  else
+    file_content=$(cat "${filename}")
+  fi
+  echo "${file_content}"
+  unset filename
+  unset defaultvalue
 }

@@ -3,6 +3,14 @@
 echo "** configure-localhost-mysql-database **"
 source ${PRJ_ROOT_DIR}/server/mysql-functions.sh
 
+# ============== Check if mysql on localhost is required ===============
+
+if [ "${RUN_MY_SQL}" = "false" ]; then
+      echo "Stop MySQL service, because the variable RUN_MY_SQL is false"
+      sudo systemctl stop mysql
+      return 1
+fi
+
 databasedir="${CONTAINER_PERSISTENT_VOLUME}/database"
 echo "databasedir = ${databasedir}"
 isMysqlInit="${PRJ_ROOT_DIR}"/local/database-records/mysqlinit
@@ -10,8 +18,12 @@ isMysqlInit="${PRJ_ROOT_DIR}"/local/database-records/mysqlinit
 # ============== prepare mysql (binding, root password, firewall) ================
 
 if [[ ! -f "$isMysqlInit" ]]; then
+
     echo "$isMysqlInit  not exists."
-    mysql_root_password=ubuntu
+
+    mysql_root_password_filename="${CONTAINER_PERSISTENT_VOLUME}/secrets/mysql_root_password.txt"
+    mysql_root_password=$(readFromFile ${mysql_root_password_filename} ubuntu)
+
     sudo systemctl stop mysql
     echo "set mysql binding to 0.0.0.0, mysql users to % and set root password"
     sudo sed -i "s/127.0.0.1/0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf

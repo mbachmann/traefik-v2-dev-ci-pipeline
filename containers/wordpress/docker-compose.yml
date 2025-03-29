@@ -9,10 +9,10 @@ networks:
     external: true
 
 services:
-  blog:
+  wordpress:
     image: wordpress:4.9.8-apache
     environment:
-      WORDPRESS_DB_HOST: wordpress-mysql
+      WORDPRESS_DB_HOST: wordpress-mysql:3306
       # WORDPRESS_DB_HOST: docker-host
       # WORDPRESS_DB_HOST: $PRIVATE_IPV4
       WORDPRESS_DB_USER: wordpress
@@ -20,10 +20,10 @@ services:
       WORDPRESS_DB_NAME: wordpress
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.blog.entrypoints=websecure"
-      - "traefik.http.routers.blog.rule=Host(`${BLOG_URL}`)"
-      - "traefik.http.routers.blog.tls=true"
-      - "traefik.http.routers.blog.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.routers.wordpress.rule=Host(`${WORDPRESS_URL}`)"
+      - "traefik.http.routers.wordpress.tls=true"
+      - "traefik.http.routers.wordpress.tls.certresolver=lets-encrypt"
       - "traefik.port=80"
     networks:
       - internal
@@ -48,10 +48,13 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD_FILE: /run/secrets/wordpress_db_password
       MYSQL_ROOT_HOST: '%'
+      MYSQL_TCP_PORT: 3306
     restart: unless-stopped
     networks:
       - internal
       - localnet
+    # ports:
+    #   - '3306:3306'
     labels:
       - traefik.enable=false
     volumes:
