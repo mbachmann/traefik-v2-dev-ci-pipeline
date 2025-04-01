@@ -105,6 +105,8 @@ services:
     container_name: promtail
     privileged: true
     volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /var/log:/var/log:ro
       - ./promtail/promtail-config.yml:/etc/promtail/promtail-config.yaml
     restart: unless-stopped
     environment:
