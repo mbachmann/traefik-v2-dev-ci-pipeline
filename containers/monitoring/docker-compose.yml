@@ -3,11 +3,15 @@ networks:
     external: true
   localnet:
     external: true
+  monitoring:
+    external: true
 
 services:
 
   prometheus:
-    image: prom/prometheus:v2.53.1
+    image: prom/prometheus-linux-amd64:v3.2.1
+    container_name: prometheus
+    privileged: true
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -15,6 +19,8 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.size=256MB'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prometheus.rule=Host(`prometheus.united-portal.com`)"
@@ -26,34 +32,138 @@ services:
     networks:
       - proxy
       - localnet
+      - monitoring
     restart: unless-stopped
     logging:
       options:
         max-size: "10m"
         max-file: "3"
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.52.1
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    networks:
+      - monitoring
+      - proxy
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+      - "/dev/disk/:/dev/disk"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cadvisor.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.united-portal.com`)"
+      - "traefik.http.routers.cadvisor.entrypoints=websecure"
+      - "traefik.http.routers.cadvisor.service=cadvisor"
+      - "traefik.http.routers.cadvisor.middlewares=traefik-auth"
+      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+
+  node-exporter:
+    image: prom/node-exporter:v1.9.0
+    container_name: node-exporter
+    restart: unless-stopped
+    privileged: true
+    networks:
+      - monitoring
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+
+  loki:
+    image: grafana/loki:3.4.2
+    container_name: loki
+    ports:
+      - "3100:3100"
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+      - proxy
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.loki.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.loki.rule=Host(`loki.united-portal.com`)"
+      - "traefik.http.routers.loki.entrypoints=websecure"
+      - "traefik.http.routers.loki.service=loki"
+      - "traefik.http.routers.loki.middlewares=traefik-auth"
+      - "traefik.http.services.loki.loadbalancer.server.port=3100"
+
+  promtail:
+    image: grafana/promtail:3.4.2
+    container_name: promtail
+    privileged: true
+    volumes:
+      - ./promtail/promtail-config.yml:/etc/promtail/promtail-config.yaml
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Zurich # Change this to your timezone
+    command: -config.file=/etc/promtail/promtail-config.yaml
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+
   grafana:
     image: grafana/grafana:11.6.0-ubuntu
-
+    user: "root:root"
     depends_on:
       - prometheus
+      - loki
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:
-      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
-      GF_INSTALL_PLUGINS: grafana-piechart-panel
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "false"
+      GF_SECURITY_DISABLE_ANGULAR_SUPPORT_ENABLED: "true"
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "123456"
+      GF_INSTALL_PLUGINS: grafana-piechart-panel,grafana-worldmap-panel,vertamedia-clickhouse-datasource
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: vertamedia-clickhouse-datasource
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: false
+          version: 1
+          editable: false
+        EOF
+        /run.sh
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.tls.certresolver=lets-encrypt"
       - "traefik.http.routers.grafana.rule=Host(`grafana.united-portal.com`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.service=grafana"
       - "traefik.http.routers.grafana.middlewares=traefik-auth"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     networks:
       - proxy
       - localnet
+      - monitoring
     restart: unless-stopped
+
     logging:
       options:
         max-size: "10m"
@@ -62,3 +172,4 @@ services:
 volumes:
   prometheus_data: {}
   grafana_data: {}
+  loki_data: {}
